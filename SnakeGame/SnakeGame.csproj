@@ -9,9 +9,38 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
-    <Folder Include="Tests\" />
-    <Folder Include="Assets\" />
+    <Compile Remove="Assets\**" />
+    <Compile Remove="Database\**" />
+    <Compile Remove="Helpers\**" />
+    <Compile Remove="Models\**" />
+    <Compile Remove="Tests\**" />
+    <Compile Remove="ViewModels\**" />
+    <Compile Remove="Views\**" />
+    <EmbeddedResource Remove="Assets\**" />
+    <EmbeddedResource Remove="Database\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="Tests\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Assets\**" />
+    <None Remove="Database\**" />
+    <None Remove="Helpers\**" />
+    <None Remove="Models\**" />
+    <None Remove="Tests\**" />
+    <None Remove="ViewModels\**" />
+    <None Remove="Views\**" />
+    <Page Remove="Assets\**" />
+    <Page Remove="Database\**" />
+    <Page Remove="Helpers\**" />
+    <Page Remove="Models\**" />
+    <Page Remove="Tests\**" />
+    <Page Remove="ViewModels\**" />
+    <Page Remove="Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Accelergreat.EntityFramework.PostgreSql" Version="3.0.0" />
   </ItemGroup>
 
 </Project>

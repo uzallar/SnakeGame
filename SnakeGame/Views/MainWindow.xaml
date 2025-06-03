@@ -4,9 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnakeGame"
+        Focusable="True"
+        Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Snake Game" Height="450" Width="600">
 
-    </Grid>
+    <Window.InputBindings>
+        <KeyBinding Key="Up" Command="{Binding MoveUpCommand}" />
+        <KeyBinding Key="Down" Command="{Binding MoveDownCommand}" />
+        <KeyBinding Key="Left" Command="{Binding MoveLeftCommand}" />
+        <KeyBinding Key="Right" Command="{Binding MoveRightCommand}" />
+    </Window.InputBindings>
+
+    <DockPanel>
+        <!-- Верхняя панель с рекордом -->
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10">
+            <TextBlock Text="Рекорд: " FontSize="16" FontWeight="Bold"/>
+            <TextBlock x:Name="MaxScoreTextBlock" FontSize="16" FontWeight="Bold" Foreground="DarkBlue"/>
+        </StackPanel>
+
+        <!-- Игровое поле -->
+        <Canvas x:Name="GameCanvas" Background="Black" />
+    </DockPanel>
 </Window>
