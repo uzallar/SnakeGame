@@ -1,30 +1,49 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace SnakeGame
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly SnakeGameViewModel viewModel;
+        private User currentUser;
 
-        public MainWindow()
+        public MainWindow(User? user = null)
         {
             InitializeComponent();
+
             viewModel = new SnakeGameViewModel();
             DataContext = viewModel;
 
+            currentUser = user;
+
+            // Показываем имя в заголовке и максимальный рекорд
+            if (currentUser != null)
+            {
+                Title = $"Snake Game — {currentUser.Username}";
+                MaxScoreTextBlock.Text = currentUser.MaxScore.ToString();
+            }
+
+            // Подписка на событие обновления счёта
+            viewModel.ScoreChanged += ViewModel_ScoreChanged;
+
+            // Запуск рендера игры
             CompositionTarget.Rendering += RenderGame;
+        }
+
+        private void ViewModel_ScoreChanged(object? sender, int newScore)
+        {
+            if (currentUser != null && newScore > currentUser.MaxScore)
+            {
+                currentUser.MaxScore = newScore;
+                MaxScoreTextBlock.Text = newScore.ToString();
+
+                // Здесь исправленный вызов метода
+                DBHelper.UpdateMaxScore(currentUser.Id, newScore);
+            }
         }
 
         private void RenderGame(object sender, System.EventArgs e)
@@ -57,7 +76,7 @@ namespace SnakeGame
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Keyboard.Focus(this); // нужно, чтобы InputBindings работали
+            Keyboard.Focus(this);
         }
     }
 }

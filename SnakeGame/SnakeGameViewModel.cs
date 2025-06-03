@@ -17,20 +17,24 @@ public enum Direction
     Right
 }
 
-
 namespace SnakeGame
 {
     public class SnakeGameViewModel : INotifyPropertyChanged
     {
         private readonly SnakeGameModel model;
         private readonly DispatcherTimer gameTimer;
+
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
+
         public ObservableCollection<Point> SnakeParts => new(model.SnakeParts);
         public Point FoodPosition => model.FoodPosition;
         public int Score => model.Score;
+
+        // Событие для уведомления об изменении счёта
+        public event EventHandler<int>? ScoreChanged;
 
         public SnakeGameViewModel()
         {
@@ -82,17 +86,19 @@ namespace SnakeGame
                 return;
             }
 
-            if (model.CheckFoodCollision())
+            bool ateFood = model.CheckFoodCollision();
+
+            if (ateFood)
             {
                 OnPropertyChanged(nameof(Score));
+                ScoreChanged?.Invoke(this, model.Score); // Уведомляем MainWindow
             }
 
             OnPropertyChanged(nameof(SnakeParts));
             OnPropertyChanged(nameof(FoodPosition));
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
