@@ -13,6 +13,7 @@
             <Setter Property="Background" Value="#FFE4EC"/>
             <Setter Property="BorderBrush" Value="#D8A7B1"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -34,6 +35,7 @@
             <Setter Property="Background" Value="#FFE4EC"/>
             <Setter Property="BorderBrush" Value="#D8A7B1"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
@@ -52,8 +54,7 @@
         <Style x:Key="OutlinedTextBlockStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#C080A3"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="25"/>
-            <!-- Размер шрифта увеличен -->
+            <Setter Property="FontSize" Value="30"/>
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect Color="#FFD1B2C4" BlurRadius="3" ShadowDepth="0" Opacity="0.8"/>
@@ -61,7 +62,7 @@
             </Setter>
         </Style>
 
-        <!-- Стили для кнопок без анимации -->
+        <!-- Стили для кнопок -->
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -106,13 +107,13 @@
                    Style="{StaticResource OutlinedTextBlockStyle}" 
                    Margin="0,0,0,5"/>
 
-        <TextBox x:Name="UsernameTextBox" Grid.Row="1" Height="40" Margin="0,0,0,10" />
+        <TextBox x:Name="UsernameTextBox" Grid.Row="1" Height="50" Margin="0,0,0,0" />
 
         <TextBlock Text="ПАРОЛЬ" Grid.Row="2" 
                    Style="{StaticResource OutlinedTextBlockStyle}" 
                    Margin="0,10,0,5"/>
 
-        <PasswordBox x:Name="PasswordBox" Grid.Row="3" Height="40" Margin="0,0,0,20"/>
+        <PasswordBox x:Name="PasswordBox" Grid.Row="3" Height="50" Margin="0,0,0,0"/>
 
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Width="160" Height="50" Margin="10" Click="LoginButton_Click">

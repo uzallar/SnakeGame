@@ -39,5 +39,10 @@ namespace SnakeGame
                 MessageBox.Show("Ошибка регистрации пользователя");
             }
         }
+
+        private void UsernameTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+
+        }
     }
 }

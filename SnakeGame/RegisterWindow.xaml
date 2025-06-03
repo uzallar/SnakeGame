@@ -9,7 +9,6 @@
         <!-- Стили как в LoginWindow -->
         <Style TargetType="TextBox">
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Padding" Value="10"/>
             <Setter Property="Background" Value="#FFE4EC"/>
             <Setter Property="BorderBrush" Value="#D8A7B1"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -19,8 +18,10 @@
                         <Border Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="10">
-                            <ScrollViewer x:Name="PART_ContentHost"/>
+                                CornerRadius="10"
+                                Padding="10">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -29,7 +30,6 @@
 
         <Style TargetType="PasswordBox">
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Padding" Value="10"/>
             <Setter Property="Background" Value="#FFE4EC"/>
             <Setter Property="BorderBrush" Value="#D8A7B1"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -39,8 +39,10 @@
                         <Border Background="{TemplateBinding Background}" 
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="10">
-                            <ScrollViewer x:Name="PART_ContentHost"/>
+                                CornerRadius="10"
+                                Padding="10">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -102,13 +104,13 @@
                    Style="{StaticResource OutlinedTextBlockStyle}" 
                    Margin="0,0,0,5"/>
 
-        <TextBox x:Name="UsernameTextBox" Grid.Row="1" Height="40" Margin="0,0,0,10" />
+        <TextBox x:Name="UsernameTextBox" Grid.Row="1" Height="50" Margin="0,0,0,0" HorizontalAlignment="Stretch" TextChanged="UsernameTextBox_TextChanged"/>
 
         <TextBlock Text="ПАРОЛЬ" Grid.Row="2" 
                    Style="{StaticResource OutlinedTextBlockStyle}" 
                    Margin="0,10,0,5"/>
 
-        <PasswordBox x:Name="PasswordBox" Grid.Row="3" Height="40" Margin="0,0,0,20"/>
+        <PasswordBox x:Name="PasswordBox" Grid.Row="3" Height="50" Margin="0,0,0,0" HorizontalAlignment="Stretch"/>
 
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Width="220" Height="50" Margin="10" Click="RegisterButton_Click">

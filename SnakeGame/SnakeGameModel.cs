@@ -11,7 +11,7 @@ namespace SnakeGame
     {
         public const int SnakeSize = 20;
         public const int GameAreaWidth = 600;
-        public const int GameAreaHeight = 400;
+        public const int GameAreaHeight = 340;
 
         public List<Point> SnakeParts { get; private set; }
         public Point SnakeHeadPosition { get; set; }
@@ -31,7 +31,9 @@ namespace SnakeGame
         public void InitializeGame()
         {
             SnakeParts.Clear();
-            SnakeHeadPosition = new Point(GameAreaWidth / 2, GameAreaHeight / 2);
+            int startX = (GameAreaWidth / SnakeSize / 2) * SnakeSize;
+            int startY = (GameAreaHeight / SnakeSize / 2) * SnakeSize;
+            SnakeHeadPosition = new Point(startX, startY);
             SnakeDirection = new Vector(SnakeSize, 0);
             SnakeLength = 5;
             Score = 0;
@@ -56,8 +58,8 @@ namespace SnakeGame
 
         public void CreateFood()
         {
-            int maxX = (int)(GameAreaWidth / SnakeSize) - 1;
-            int maxY = (int)(GameAreaHeight / SnakeSize) - 1;
+            int maxX = GameAreaWidth / SnakeSize;
+            int maxY = GameAreaHeight / SnakeSize;
 
             FoodPosition = new Point(
                 random.Next(0, maxX) * SnakeSize,
