@@ -17,88 +17,180 @@ public enum Direction
     Right
 }
 
+
 namespace SnakeGame
 {
     public class SnakeGameViewModel : INotifyPropertyChanged
     {
-        private readonly SnakeGameModel model;
-        private readonly DispatcherTimer gameTimer;
-
+        private SnakeGameModel model;
+        private DispatcherTimer gameTimer;
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
         public ICommand MoveLeftCommand { get; }
         public ICommand MoveRightCommand { get; }
-
+        public ICommand Start { get; }
+        public ICommand RestartCommand { get; }
+        public ICommand PauseCommand { get; }
+        public ICommand ResumeCommand { get; }
+        public ICommand ExitCommand { get; }
         public ObservableCollection<Point> SnakeParts => new(model.SnakeParts);
         public Point FoodPosition => model.FoodPosition;
         public int Score => model.Score;
+        private bool _gameRunning = true;
+        private bool _isGameStarted;
+        private bool _isPaused;
+        private Vector _nextDirection;
 
-        // Событие для уведомления об изменении счёта
-        public event EventHandler<int>? ScoreChanged;
+        public Vector NextDirection
+        {
+            get { return _nextDirection; }
+            set
+            {
+                _nextDirection = value;
+            }
+        }
+        public bool IsPaused
+        {
+            get => _isPaused;
+            set
+            {
+                _isPaused = value;
+                OnPropertyChanged(nameof(IsPaused));
+            }
+        }
+        public bool IsGameStarted
+        {
+            get => _isGameStarted;
+            set
+            {
+                if (_isGameStarted != value)
+                {
+                    _isGameStarted = value;
+                    OnPropertyChanged(nameof(IsGameStarted));
+                }
+            }
+        }
+        public bool GameRunning
+        {
+            get => _gameRunning;
+            set
+            {
+                _gameRunning = value;
+            }
+        }
 
         public SnakeGameViewModel()
         {
             model = new SnakeGameModel();
             model.InitializeGame();
 
+            NextDirection = model.SnakeDirection;
+
             MoveUpCommand = new RelayCommand(_ => ChangeDirection(Direction.Up));
             MoveDownCommand = new RelayCommand(_ => ChangeDirection(Direction.Down));
             MoveLeftCommand = new RelayCommand(_ => ChangeDirection(Direction.Left));
             MoveRightCommand = new RelayCommand(_ => ChangeDirection(Direction.Right));
+            Start = new RelayCommand(_ => StartGame());
+            RestartCommand = new RelayCommand(_ => RestartGame());
+            PauseCommand = new RelayCommand(_ => PauseGame());
+            ResumeCommand = new RelayCommand(_ => ResumeGame());
+            ExitCommand = new RelayCommand(_ => ExitGame());
 
             gameTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
             gameTimer.Tick += GameLoop;
-            gameTimer.Start();
+        }
+        private void ExitGame()
+        {
+            Application.Current.Shutdown();
+        }
+        private void ResumeGame()
+        {
+            PauseGame();
+        }
+        private void PauseGame()
+        {
+            if (!IsGameStarted || !GameRunning) return;
+            IsPaused = !IsPaused;
+            if (IsPaused)
+                gameTimer.Stop();
+            else
+                gameTimer.Start();
+        }
+        private void RestartGame()
+        {
+            StartGame();
+            PauseGame();
         }
 
-        private void ChangeDirection(Direction newDirection)
+        private void StartGame()
         {
-            var current = model.SnakeDirection;
-            switch (newDirection)
+
+            model.InitializeGame();
+            NextDirection = model.SnakeDirection;
+            UpdateSnakeParts();
+            IsGameStarted = true;
+            GameRunning = true;
+            gameTimer.Start();
+            OnPropertyChanged(nameof(SnakeParts));
+            OnPropertyChanged(nameof(FoodPosition));
+            OnPropertyChanged(nameof(Score));
+        }
+
+        private void ChangeDirection(Direction direction)
+        {
+            if (!IsPaused)
             {
-                case Direction.Up:
-                    if (current.Y == 0) model.SnakeDirection = new Vector(0, -SnakeGameModel.SnakeSize);
-                    break;
-                case Direction.Down:
-                    if (current.Y == 0) model.SnakeDirection = new Vector(0, SnakeGameModel.SnakeSize);
-                    break;
-                case Direction.Left:
-                    if (current.X == 0) model.SnakeDirection = new Vector(-SnakeGameModel.SnakeSize, 0);
-                    break;
-                case Direction.Right:
-                    if (current.X == 0) model.SnakeDirection = new Vector(SnakeGameModel.SnakeSize, 0);
-                    break;
+                Vector newDir = direction switch
+                {
+                    Direction.Up => new Vector(0, -SnakeGameModel.SnakeSize),
+                    Direction.Down => new Vector(0, SnakeGameModel.SnakeSize),
+                    Direction.Left => new Vector(-SnakeGameModel.SnakeSize, 0),
+                    Direction.Right => new Vector(SnakeGameModel.SnakeSize, 0),
+                    _ => model.SnakeDirection
+                };
+
+                if (newDir + model.SnakeDirection != new Vector(0, 0))
+                {
+                    NextDirection = newDir;
+                }
             }
         }
 
         private void GameLoop(object sender, EventArgs e)
         {
-            if (!model.IsGameRunning || model.IsGameOver)
+            if (!GameRunning)
                 return;
-
+            model.SnakeDirection = NextDirection;
             model.MoveSnake();
+            UpdateSnakeParts();
 
             if (model.CheckCollisions())
             {
-                model.IsGameOver = true;
-                model.IsGameRunning = false;
                 MessageBox.Show($"Game Over! Your score: {model.Score}");
+                GameRunning = false;
+                StartGame();
                 return;
             }
 
-            bool ateFood = model.CheckFoodCollision();
-
-            if (ateFood)
+            if (model.CheckFoodCollision())
             {
                 OnPropertyChanged(nameof(Score));
-                ScoreChanged?.Invoke(this, model.Score); // Уведомляем MainWindow
             }
 
             OnPropertyChanged(nameof(SnakeParts));
             OnPropertyChanged(nameof(FoodPosition));
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private void UpdateSnakeParts()
+        {
+            SnakeParts.Clear();
+            foreach (var part in model.SnakeParts)
+            {
+                SnakeParts.Add(part);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

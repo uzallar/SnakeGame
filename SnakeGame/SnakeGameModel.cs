@@ -19,8 +19,6 @@ namespace SnakeGame
         public int SnakeLength { get; set; }
         public Point FoodPosition { get; set; }
         public int Score { get; set; }
-        public bool IsGameRunning { get; set; }
-        public bool IsGameOver { get; set; }
 
         private Random random;
 
@@ -37,8 +35,6 @@ namespace SnakeGame
             SnakeDirection = new Vector(SnakeSize, 0);
             SnakeLength = 5;
             Score = 0;
-            IsGameRunning = true;
-            IsGameOver = false;
 
             SnakeParts.Add(SnakeHeadPosition);
 
@@ -99,8 +95,8 @@ namespace SnakeGame
         public bool CheckCollisions()
         {
             // Проверка столкновения с границами
-            if (SnakeHeadPosition.X < 0 || SnakeHeadPosition.X >= GameAreaWidth ||
-                SnakeHeadPosition.Y < 0 || SnakeHeadPosition.Y >= GameAreaHeight)
+            if (SnakeHeadPosition.X < 0 || SnakeHeadPosition.X > GameAreaWidth - SnakeSize ||
+                SnakeHeadPosition.Y < 0 || SnakeHeadPosition.Y > GameAreaHeight - SnakeSize)
             {
                 return true;
             }

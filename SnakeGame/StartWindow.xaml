@@ -1,10 +1,166 @@
 ﻿<Window x:Class="SnakeGame.StartWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Добро пожаловать" Height="200" Width="300"
-        WindowStartupLocation="CenterScreen">
-    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <Button Content="Вход" Width="150" Margin="10" Click="Login_Click"/>
-        <Button Content="Регистрация" Width="150" Margin="10" Click="Register_Click"/>
-    </StackPanel>
+        Title="Добро пожаловать" Height="400" Width="700"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF0F5">
+
+    <Window.Resources>
+        <!-- Стили кнопок -->
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="#F8C8DC"/>
+            <Setter Property="Foreground" Value="#673147"/>
+            <Setter Property="BorderBrush" Value="#E8AEB7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="12" >
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#F3A7C2"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF6F91"/>
+                                <Setter Property="Foreground" Value="#FF3B88"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Анимация покачивания головы змейки -->
+        <Storyboard x:Key="HeadSwayAnimation" RepeatBehavior="Forever" AutoReverse="True">
+            <DoubleAnimation Storyboard.TargetName="HeadTransform" 
+                             Storyboard.TargetProperty="Angle" 
+                             From="-10" To="10" Duration="0:0:1.5"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Фоновый Canvas с множеством змейок -->
+        <Canvas>
+            <!-- Змейка 1 -->
+            <Canvas Width="120" Height="60" Canvas.Left="10" Canvas.Top="20">
+                <Ellipse Width="25" Height="20" Fill="#F482AC" Canvas.Left="0" Canvas.Top="20" />
+                <Ellipse Width="25" Height="20" Fill="#F58EB5" Canvas.Left="20" Canvas.Top="18" />
+                <Ellipse Width="25" Height="20" Fill="#F68EB7" Canvas.Left="40" Canvas.Top="16" />
+                <Ellipse Width="25" Height="20" Fill="#F794C0" Canvas.Left="60" Canvas.Top="14" />
+                <Ellipse Width="25" Height="20" Fill="#F895C2" Canvas.Left="80" Canvas.Top="12" />
+                <Ellipse Width="30" Height="30" Fill="#F95DA4" Canvas.Left="90" Canvas.Top="10" />
+                <Ellipse Width="10" Height="10" Fill="White" Canvas.Left="100" Canvas.Top="15" />
+                <Ellipse Width="10" Height="10" Fill="White" Canvas.Left="115" Canvas.Top="15" />
+                <Ellipse Width="5" Height="5" Fill="#673147" Canvas.Left="103" Canvas.Top="18" />
+                <Ellipse Width="5" Height="5" Fill="#673147" Canvas.Left="118" Canvas.Top="18" />
+            </Canvas>
+
+            <!-- Змейка 2 -->
+            <Canvas Width="80" Height="40" Canvas.Left="200" Canvas.Top="10" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="0.7" ScaleY="0.7"/>
+                </Canvas.RenderTransform>
+                <Ellipse Width="20" Height="15" Fill="#F482AC" Canvas.Left="0" Canvas.Top="15" />
+                <Ellipse Width="20" Height="15" Fill="#F58EB5" Canvas.Left="15" Canvas.Top="14" />
+                <Ellipse Width="20" Height="15" Fill="#F68EB7" Canvas.Left="30" Canvas.Top="13" />
+                <Ellipse Width="20" Height="15" Fill="#F794C0" Canvas.Left="45" Canvas.Top="12" />
+                <Ellipse Width="20" Height="15" Fill="#F895C2" Canvas.Left="60" Canvas.Top="11" />
+                <Ellipse Width="25" Height="25" Fill="#F95DA4" Canvas.Left="70" Canvas.Top="10" />
+                <Ellipse Width="8" Height="8" Fill="White" Canvas.Left="75" Canvas.Top="15" />
+                <Ellipse Width="8" Height="8" Fill="White" Canvas.Left="85" Canvas.Top="15" />
+                <Ellipse Width="4" Height="4" Fill="#673147" Canvas.Left="78" Canvas.Top="18" />
+                <Ellipse Width="4" Height="4" Fill="#673147" Canvas.Left="88" Canvas.Top="18" />
+            </Canvas>
+
+            <!-- Змейка 3 -->
+            <Canvas Width="100" Height="50" Canvas.Left="550" Canvas.Top="300" RenderTransformOrigin="0.5,0.5">
+                <Canvas.RenderTransform>
+                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                </Canvas.RenderTransform>
+                <Ellipse Width="22" Height="18" Fill="#F482AC" Canvas.Left="0" Canvas.Top="18" />
+                <Ellipse Width="22" Height="18" Fill="#F58EB5" Canvas.Left="18" Canvas.Top="16" />
+                <Ellipse Width="22" Height="18" Fill="#F68EB7" Canvas.Left="36" Canvas.Top="14" />
+                <Ellipse Width="22" Height="18" Fill="#F794C0" Canvas.Left="54" Canvas.Top="12" />
+                <Ellipse Width="22" Height="18" Fill="#F895C2" Canvas.Left="72" Canvas.Top="10" />
+                <Ellipse Width="28" Height="28" Fill="#F95DA4" Canvas.Left="80" Canvas.Top="8" />
+                <Ellipse Width="9" Height="9" Fill="White" Canvas.Left="90" Canvas.Top="13" />
+                <Ellipse Width="9" Height="9" Fill="White" Canvas.Left="102" Canvas.Top="13" />
+                <Ellipse Width="5" Height="5" Fill="#673147" Canvas.Left="93" Canvas.Top="17" />
+                <Ellipse Width="5" Height="5" Fill="#673147" Canvas.Left="105" Canvas.Top="17" />
+            </Canvas>
+
+            <!-- Дополнительные змейки (можно добавить еще) -->
+        </Canvas>
+
+        <!-- Основной StackPanel с содержимым -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" MaxWidth="600" Background="#FFF0F5" >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,30" VerticalAlignment="Center">
+
+                <!-- Главная большая змейка с анимацией -->
+                <Canvas Width="120" Height="60" Margin="0,0,15,0">
+                    <Ellipse Width="25" Height="20" Fill="#F482AC" Canvas.Left="0" Canvas.Top="20" />
+                    <Ellipse Width="25" Height="20" Fill="#F58EB5" Canvas.Left="20" Canvas.Top="18" />
+                    <Ellipse Width="25" Height="20" Fill="#F68EB7" Canvas.Left="40" Canvas.Top="16" />
+                    <Ellipse Width="25" Height="20" Fill="#F794C0" Canvas.Left="60" Canvas.Top="14" />
+                    <Ellipse Width="25" Height="20" Fill="#F895C2" Canvas.Left="80" Canvas.Top="12" />
+                    <Ellipse Width="30" Height="30" Fill="#F95DA4" Canvas.Left="90" Canvas.Top="10" RenderTransformOrigin="0.5,0.5" >
+                        <Ellipse.RenderTransform>
+                            <RotateTransform x:Name="HeadTransform" Angle="0"/>
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+                    <Ellipse Width="10" Height="10" Fill="White" Canvas.Left="100" Canvas.Top="15" />
+                    <Ellipse Width="10" Height="10" Fill="White" Canvas.Left="115" Canvas.Top="15" />
+                    <Ellipse Width="5" Height="5" Fill="#673147" Canvas.Left="103" Canvas.Top="18" />
+                    <Ellipse Width="5" Height="5" Fill="#673147" Canvas.Left="118" Canvas.Top="18" />
+                </Canvas>
+
+                <!-- Красивый заголовок с градиентом и "обводкой сверху" -->
+                <Grid VerticalAlignment="Center">
+                    <TextBlock Text="ДОБРО ПОЖАЛОВАТЬ"
+                               FontWeight="Bold"
+                               FontSize="40"
+                               HorizontalAlignment="Center"
+                               Foreground="#FFC0CB"
+                               Opacity="0.5"
+                               Margin="0,-5,0,0"
+                               TextOptions.TextFormattingMode="Ideal"
+                               TextOptions.TextRenderingMode="ClearType"
+                               />
+                    <TextBlock Text="ДОБРО ПОЖАЛОВАТЬ"
+                               FontWeight="Bold"
+                               FontSize="40"
+                               HorizontalAlignment="Center"
+                               TextOptions.TextFormattingMode="Ideal"
+                               TextOptions.TextRenderingMode="ClearType">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#FF69B4" Offset="0"/>
+                                <GradientStop Color="#8B008B" Offset="1"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                </Grid>
+
+            </StackPanel>
+
+            <!-- Кнопки с увеличенным шрифтом -->
+            <Button Content="Вход" Margin="9" Click="Login_Click" Height="45" FontSize="24" />
+            <Button Content="Регистрация" Margin="9" Click="Register_Click" Height="45" FontSize="24" />
+        </StackPanel>
+    </Grid>
+
+    <Window.Triggers>
+        <!-- Запускаем анимацию покачивания головы основной змейки -->
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource HeadSwayAnimation}" />
+        </EventTrigger>
+    </Window.Triggers>
+
 </Window>
