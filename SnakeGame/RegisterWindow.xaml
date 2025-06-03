@@ -1,15 +1,122 @@
 ﻿<Window x:Class="SnakeGame.RegisterWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Регистрация" Height="200" Width="300"
-        WindowStartupLocation="CenterScreen">
-    <Grid Margin="10">
-        <StackPanel>
-            <TextBlock Text="Имя пользователя" Margin="0,0,0,2"/>
-            <TextBox x:Name="UsernameTextBox" Margin="0,0,0,5"/>
-            <TextBlock Text="Пароль" Margin="0,5,0,2"/>
-            <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10"/>
-            <Button Content="Зарегистрироваться" Click="RegisterButton_Click"/>
+        Title="Регистрация" Height="400" Width="700"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF0F5">
+
+    <Window.Resources>
+        <!-- Стили как в LoginWindow -->
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="#FFE4EC"/>
+            <Setter Property="BorderBrush" Value="#D8A7B1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="PasswordBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="#FFE4EC"/>
+            <Setter Property="BorderBrush" Value="#D8A7B1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="OutlinedTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#C080A3"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="25"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#FFD1B2C4" BlurRadius="3" ShadowDepth="0" Opacity="0.8"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="#F8C8DC"/>
+            <Setter Property="Foreground" Value="#673147"/>
+            <Setter Property="BorderBrush" Value="#E8AEB7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="12" >
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#F3A7C2"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF6F91"/>
+                                <Setter Property="Foreground" Value="#FF3B88"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="ИМЯ ПОЛЬЗОВАТЕЛЯ" 
+                   Style="{StaticResource OutlinedTextBlockStyle}" 
+                   Margin="0,0,0,5"/>
+
+        <TextBox x:Name="UsernameTextBox" Grid.Row="1" Height="40" Margin="0,0,0,10" />
+
+        <TextBlock Text="ПАРОЛЬ" Grid.Row="2" 
+                   Style="{StaticResource OutlinedTextBlockStyle}" 
+                   Margin="0,10,0,5"/>
+
+        <PasswordBox x:Name="PasswordBox" Grid.Row="3" Height="40" Margin="0,0,0,20"/>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Width="220" Height="50" Margin="10" Click="RegisterButton_Click">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="🍓 " FontSize="18"/>
+                    <TextBlock Text="Зарегистрироваться" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>
