@@ -28,8 +28,10 @@ namespace SnakeGame
             }
 
             // Подписка на событие обновления счёта
-            //viewModel.ScoreChanged += ViewModel_ScoreChanged;
+            viewModel.ScoreChanged += ViewModel_ScoreChanged;
 
+            // Запуск рендера игры
+            CompositionTarget.Rendering += RenderGame;
         }
 
         private void ViewModel_ScoreChanged(object? sender, int newScore)
@@ -42,6 +44,34 @@ namespace SnakeGame
                 // Здесь исправленный вызов метода
                 DBHelper.UpdateMaxScore(currentUser.Id, newScore);
             }
+        }
+
+        private void RenderGame(object sender, System.EventArgs e)
+        {
+            GameCanvas.Children.Clear();
+
+            foreach (var part in viewModel.SnakeParts)
+            {
+                var rect = new Rectangle
+                {
+                    Width = SnakeGameModel.SnakeSize,
+                    Height = SnakeGameModel.SnakeSize,
+                    Fill = Brushes.Green
+                };
+                Canvas.SetLeft(rect, part.X);
+                Canvas.SetTop(rect, part.Y);
+                GameCanvas.Children.Add(rect);
+            }
+
+            var foodRect = new Rectangle
+            {
+                Width = SnakeGameModel.SnakeSize,
+                Height = SnakeGameModel.SnakeSize,
+                Fill = Brushes.Red
+            };
+            Canvas.SetLeft(foodRect, viewModel.FoodPosition.X);
+            Canvas.SetTop(foodRect, viewModel.FoodPosition.Y);
+            GameCanvas.Children.Add(foodRect);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
