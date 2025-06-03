@@ -1,4 +1,4 @@
-﻿<Window x:Class="SnakeGame.MainWindow"
+﻿<Window x:Class="SnakeGame.MainWindow"  
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,8 +7,10 @@
         Focusable="True"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="Snake Game" Height="450" Width="600">
+        Title="Змейка" Height="550" Width="700"
+        Background="#D0F0C0">
 
+    <!-- Управление клавишами -->
     <Window.InputBindings>
         <KeyBinding Key="Up" Command="{Binding MoveUpCommand}" />
         <KeyBinding Key="Down" Command="{Binding MoveDownCommand}" />
@@ -16,14 +18,49 @@
         <KeyBinding Key="Right" Command="{Binding MoveRightCommand}" />
     </Window.InputBindings>
 
-    <DockPanel>
-        <!-- Верхняя панель с рекордом -->
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10">
-            <TextBlock Text="Рекорд: " FontSize="16" FontWeight="Bold"/>
-            <TextBlock x:Name="MaxScoreTextBlock" FontSize="16" FontWeight="Bold" Foreground="DarkBlue"/>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Text="ЗМЕЙКА" FontSize="36" FontWeight="ExtraBold" 
+                   HorizontalAlignment="Center" TextAlignment="Center" Margin="0,0,0,10" 
+                   FontFamily="Comic Sans MS" Width="650">
+            <TextBlock.Foreground>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#FFEF4C9E" Offset="0"/>
+                    <GradientStop Color="#FFD6336C" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBlock.Foreground>
+        </TextBlock>
+
+        <!-- Игровое поле + рекорд -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+            <!-- Панель с рекордом -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                <TextBlock Text="Рекорд: " FontSize="18" FontWeight="Bold" FontFamily="Comic Sans MS"/>
+                <TextBlock x:Name="MaxScoreTextBlock" FontSize="18" FontWeight="Bold" Foreground="DarkBlue" FontFamily="Comic Sans MS"/>
+            </StackPanel>
+
+            <!-- Игровое поле -->
+            <Border Width="650" Height="350" CornerRadius="20" ClipToBounds="True" Background="#A7D977">
+                <Canvas x:Name="GameCanvas" Background="Transparent" Width="650" Height="350" ClipToBounds="True" SnapsToDevicePixels="True"/>
+            </Border>
         </StackPanel>
 
-        <!-- Игровое поле -->
-        <Canvas x:Name="GameCanvas" Background="Black" />
-    </DockPanel>
+        <!-- Текущий счёт -->
+        <TextBlock x:Name="ScoreText" Grid.Row="2" Text="Очки: 0" FontSize="24" FontWeight="ExtraBold" 
+                   HorizontalAlignment="Center" TextAlignment="Center" Margin="0,15,0,0" 
+                   FontFamily="Comic Sans MS" Width="650">
+            <TextBlock.Foreground>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#FFEF4C9E" Offset="0"/>
+                    <GradientStop Color="#FFD6336C" Offset="1"/>
+                </LinearGradientBrush>
+            </TextBlock.Foreground>
+        </TextBlock>
+    </Grid>
 </Window>

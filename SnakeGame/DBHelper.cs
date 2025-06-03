@@ -12,7 +12,7 @@ namespace SnakeGame
 
         static DBHelper()
         {
-            var connStr = "Host=localhost;Port=5432;Username=postgres;Password=1234;Database=Gamers";
+            var connStr = "Host=localhost;Port=5432;Username=postgres;Password=2705;Database=Gamers";
             try
             {
                 _conn = new NpgsqlConnection(connStr);
