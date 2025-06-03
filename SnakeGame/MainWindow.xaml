@@ -7,12 +7,68 @@
         Focusable="True"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="600">
+        Title="MainWindow" Height="500" Width="700">
+    <Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter2"/>
+        <local:SnakePartToBrushConverter x:Key="SnakePartToBrushConverter"/>
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="Up" Command="{Binding MoveUpCommand}" />
         <KeyBinding Key="Down" Command="{Binding MoveDownCommand}" />
         <KeyBinding Key="Left" Command="{Binding MoveLeftCommand}" />
         <KeyBinding Key="Right" Command="{Binding MoveRightCommand}" />
+        <KeyBinding Key="Esc" Command="{Binding PauseCommand}"/>
     </Window.InputBindings>
-    <Canvas x:Name="GameCanvas" Background="Black"/>
+    <Grid Margin="0,0,0,-16">
+        <Canvas Background="Black" Focusable="True">
+            <!-- Отрисовка змейки -->
+            <ItemsControl ItemsSource="{Binding SnakeParts}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Ellipse 
+                            Width="20" 
+                            Height="20" 
+                            Fill="{Binding Converter={StaticResource SnakePartToBrushConverter}}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+
+            <!-- Отрисовка еды -->
+            <Ellipse 
+                Width="20" 
+                Height="20" 
+                Fill="Red">
+                <Ellipse.Style>
+                    <Style TargetType="Ellipse">
+                        <Setter Property="Canvas.Left" Value="{Binding FoodPosition.X}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding FoodPosition.Y}"/>
+                    </Style>
+                </Ellipse.Style>
+            </Ellipse>
+        </Canvas>
+
+        <Button Content="Start" Command="{Binding Start}" Visibility="{Binding IsGameStarted, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        <Grid Background="#80000000"
+          Visibility="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter2}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Пауза" FontSize="24" Foreground="White" HorizontalAlignment="Center"/>
+                <Button Content="Продолжить" Command="{Binding ResumeCommand}" Padding="10,5"/>
+                <Button Content="Рестарт" Command="{Binding RestartCommand}" Padding="10,5"/>
+                <Button Content="Выход" Command="{Binding ExitCommand}" Padding="10,5"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
 </Window>
