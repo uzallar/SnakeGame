@@ -7,7 +7,7 @@
         Focusable="True"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="Змейка" Height="550" Width="700"
+        Title="Змейка" Height="600" Width="700"
         Background="#D0F0C0">
 
     <Window.Resources>
@@ -42,12 +42,38 @@
             </TextBlock.Foreground>
         </TextBlock>
 
-        <!-- Игровое поле + рекорд -->
+        <!-- Игровое поле + счёт -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Center">
-            <!-- Панель с рекордом -->
+            <!-- Панель с рекордом и очками -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
-                <TextBlock Text="Рекорд: " FontSize="24" FontWeight="Bold" FontFamily="Comic Sans MS"/>
-                <TextBlock x:Name="MaxScoreTextBlock" FontSize="24" FontWeight="Bold" Foreground="Black" FontFamily="Comic Sans MS"/>
+                <TextBlock Text="Рекорд: "
+                           FontSize="24"
+                           FontWeight="Bold"
+                           FontFamily="Comic Sans MS"
+                           Margin="0,0,5,0"
+                           Foreground="Black"/>
+
+                <TextBlock x:Name="MaxScoreTextBlock"
+                           Text="0"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           FontFamily="Comic Sans MS"
+                           Margin="0,0,20,0"
+                           Foreground="Black"/>
+
+                <TextBlock Text="Очки: "
+                           FontSize="24"
+                           FontWeight="Bold"
+                           FontFamily="Comic Sans MS"
+                           Margin="0,0,5,0"
+                           Foreground="Black"/>
+
+                <TextBlock x:Name="ScoreValueTextBlock"
+                           Text="0"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           FontFamily="Comic Sans MS"
+                           Foreground="Black"/>
             </StackPanel>
 
             <!-- Игровое поле -->
@@ -76,7 +102,7 @@
                         </ItemsControl.ItemContainerStyle>
                     </ItemsControl>
 
-                    <!-- Отрисовка еды -->
+                    <!-- Еда -->
                     <Ellipse 
                         Width="20" 
                         Height="20" 
@@ -87,28 +113,15 @@
             </Border>
         </StackPanel>
 
-        <!-- Нижняя панель с очками и выбором скорости -->
+        <!-- Нижняя панель -->
         <Grid Grid.Row="2" Margin="0,15,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Текущий счёт -->
-            <TextBlock x:Name="ScoreText" 
-                       Text="Очки: " FontSize="24" FontWeight="ExtraBold" 
-                       HorizontalAlignment="Center" TextAlignment="Center" 
-                       FontFamily="Comic Sans MS" Width="650" Grid.Row="0">
-                <TextBlock.Foreground>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#FFEF4C9E" Offset="0"/>
-                        <GradientStop Color="#FFD6336C" Offset="1"/>
-                    </LinearGradientBrush>
-                </TextBlock.Foreground>
-            </TextBlock>
-
-            <!-- Выбор скорости змейки и кнопки -->
-            <StackPanel Orientation="Vertical"
+            <!-- Выбор скорости змейки и кнопки в одном ряду -->
+            <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Margin="0,15,0,0"
@@ -116,11 +129,13 @@
                         Visibility="{Binding IsGameStarted, Converter={StaticResource BoolToVisibilityConverter}}"
                         Grid.Row="1">
 
+                <!-- Текст слева -->
                 <TextBlock Text="Выберите скорость змейки:"
                            FontSize="16"
                            FontWeight="Bold"
                            FontFamily="Comic Sans MS"
-                           Margin="0,0,0,10" HorizontalAlignment="Center">
+                           Margin="0,0,10,30"
+                           VerticalAlignment="Center">
                     <TextBlock.Foreground>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <GradientStop Color="#FFEF4C9E" Offset="0"/>
@@ -129,44 +144,43 @@
                     </TextBlock.Foreground>
                 </TextBlock>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Медленно"
-                            Command="{Binding SetSlowSpeedCommand}"
-                            Padding="10,5"
-                            Margin="0,0,5,0"
-                            FontFamily="Comic Sans MS"
-                            FontSize="14"
-                            Background="#FFEF4C9E"
-                            Foreground="White"
-                            BorderBrush="Transparent"
-                            IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
+                <!-- Кнопки скорости -->
+                <Button Content="Медленно"
+                        Command="{Binding SetSlowSpeedCommand}"
+                        Padding="10,5"
+                        Margin="0,0,5,30"
+                        FontFamily="Comic Sans MS"
+                        FontSize="14"
+                        Background="#FFEF4C9E"
+                        Foreground="White"
+                        BorderBrush="Transparent"
+                        IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
 
-                    <Button Content="Средне"
-                            Command="{Binding SetMediumSpeedCommand}"
-                            Padding="10,5"
-                            Margin="5,0,5,0"
-                            FontFamily="Comic Sans MS"
-                            FontSize="14"
-                            Background="#FFEF4C9E"
-                            Foreground="White"
-                            BorderBrush="Transparent"
-                            IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
+                <Button Content="Средне"
+                        Command="{Binding SetMediumSpeedCommand}"
+                        Padding="10,5"
+                        Margin="5,0,5,30"
+                        FontFamily="Comic Sans MS"
+                        FontSize="14"
+                        Background="#FFEF4C9E"
+                        Foreground="White"
+                        BorderBrush="Transparent"
+                        IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
 
-                    <Button Content="Быстро"
-                            Command="{Binding SetFastSpeedCommand}"
-                            Padding="10,5"
-                            Margin="5,0,0,0"
-                            FontFamily="Comic Sans MS"
-                            FontSize="14"
-                            Background="#FFEF4C9E"
-                            Foreground="White"
-                            BorderBrush="Transparent"
-                            IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
-                </StackPanel>
+                <Button Content="Быстро"
+                        Command="{Binding SetFastSpeedCommand}"
+                        Padding="10,5"
+                        Margin="5,0,0,30"
+                        FontFamily="Comic Sans MS"
+                        FontSize="14"
+                        Background="#FFEF4C9E"
+                        Foreground="White"
+                        BorderBrush="Transparent"
+                        IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
             </StackPanel>
         </Grid>
 
-        <!-- Кнопка Start - на весь экран -->
+        <!-- Кнопка Start -->
         <Button Content="Start" Command="{Binding Start}" 
                 Visibility="{Binding IsGameStarted, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -174,7 +188,7 @@
                 Background="#CCD6336C" BorderBrush="Transparent"
                 Grid.RowSpan="3"/>
 
-        <!-- Оверлей паузы -->
+        <!-- Пауза -->
         <Grid Background="#80000000"
               Visibility="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter2}}"
               IsHitTestVisible="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -188,14 +202,11 @@
                     VerticalAlignment="Center"
                     Width="300">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                    <!-- Заголовок -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                         <TextBlock Text="Пауза"
                                    FontSize="28"
                                    FontWeight="Bold"
-                                   FontFamily="Comic Sans MS"
-                                   VerticalAlignment="Center">
+                                   FontFamily="Comic Sans MS">
                             <TextBlock.Foreground>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                     <GradientStop Color="#FFEF4C9E" Offset="0"/>
@@ -205,7 +216,6 @@
                         </TextBlock>
                     </StackPanel>
 
-                    <!-- Кнопки -->
                     <Button Content="Продолжить"
                             Command="{Binding ResumeCommand}"
                             FontFamily="Comic Sans MS"
@@ -214,8 +224,7 @@
                             Margin="0,0,0,10"
                             Background="#FFEF4C9E"
                             Foreground="White"
-                            BorderBrush="Transparent"
-                            Cursor="Hand"/>
+                            BorderBrush="Transparent"/>
 
                     <Button Content="Рестарт"
                             Command="{Binding RestartCommand}"
@@ -225,8 +234,7 @@
                             Margin="0,0,0,10"
                             Background="#FFEF4C9E"
                             Foreground="White"
-                            BorderBrush="Transparent"
-                            Cursor="Hand"/>
+                            BorderBrush="Transparent"/>
 
                     <Button Content="Выход"
                             Command="{Binding ExitCommand}"
@@ -235,11 +243,9 @@
                             Padding="10,5"
                             Background="#FFEF4C9E"
                             Foreground="White"
-                            BorderBrush="Transparent"
-                            Cursor="Hand"/>
+                            BorderBrush="Transparent"/>
                 </StackPanel>
             </Border>
         </Grid>
-
     </Grid>
 </Window>
