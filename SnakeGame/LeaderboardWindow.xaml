@@ -25,7 +25,9 @@
 
         <!-- Таблица с игроками -->
         <Border Grid.Row="1" Background="#A7D977" CornerRadius="15" Padding="5">
-            <ListView x:Name="LeaderboardListView" Background="White" BorderThickness="0" Margin="0">
+            <ListView x:Name="LeaderboardListView" 
+                      ItemsSource="{Binding TopPlayers}"
+                      Background="White" BorderThickness="0" Margin="0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="#" DisplayMemberBinding="{Binding Rank}" Width="30"/>

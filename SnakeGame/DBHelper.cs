@@ -13,16 +13,64 @@ namespace SnakeGame
 
         static DBHelper()
         {
-            var connStr = "Host=localhost;Port=5432;Username=postgres;Password=1234;Database=Gamers";
+            var mainDbName = "Gamers";
+            var adminConnStr = "Host=localhost;Port=5432;Username=postgres;Password=1234;Database=postgres";
+
             try
             {
+                // Шаг 1: Подключаемся к postgres и создаем БД, если её нет
+                using var adminConn = new NpgsqlConnection(adminConnStr);
+                adminConn.Open();
+
+                using (var checkCmd = adminConn.CreateCommand())
+                {
+                    checkCmd.CommandText = "SELECT 1 FROM pg_database WHERE datname = @dbname";
+                    checkCmd.Parameters.AddWithValue("dbname", mainDbName);
+                    var exists = checkCmd.ExecuteScalar();
+
+                    if (exists == null)
+                    {
+                        using var createCmd = adminConn.CreateCommand();
+                        createCmd.CommandText = $"CREATE DATABASE \"{mainDbName}\"";
+                        createCmd.ExecuteNonQuery();
+                    }
+                }
+
+                // Шаг 2: Подключаемся к созданной БД
+                var connStr = $"Host=localhost;Port=5432;Username=postgres;Password=1234;Database={mainDbName}";
                 _conn = new NpgsqlConnection(connStr);
                 _conn.Open();
+
+                // Шаг 3: Создаём таблицу users, если её нет
+                InitializeDatabase();
             }
             catch (Exception ex)
             {
                 _conn = null;
-                MessageBox.Show($"Ошибка подключения к БД: {ex.Message}");
+                MessageBox.Show($"Ошибка подключения или инициализации БД: {ex.Message}");
+            }
+        }
+
+        private static void InitializeDatabase()
+        {
+            if (_conn == null) return;
+
+            try
+            {
+                using var cmd = _conn.CreateCommand();
+                cmd.CommandText = @"
+                    CREATE TABLE IF NOT EXISTS users (
+                        id SERIAL PRIMARY KEY,
+                        username TEXT NOT NULL UNIQUE,
+                        password_hash TEXT NOT NULL,
+                        max_score INTEGER
+                    );
+                ";
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка создания таблицы: {ex.Message}");
             }
         }
 
@@ -156,6 +204,5 @@ namespace SnakeGame
 
             return users;
         }
-
     }
 }
