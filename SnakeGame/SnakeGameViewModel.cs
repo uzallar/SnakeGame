@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using System.Windows;
 
 public enum Direction
 {
@@ -23,8 +20,9 @@ namespace SnakeGame
     {
         private SnakeGameModel model;
         private DispatcherTimer gameTimer;
+        private ObservableCollection<Point> _snakeParts;
 
-        // Команды управления
+        // Команды
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
         public ICommand MoveLeftCommand { get; }
@@ -34,13 +32,12 @@ namespace SnakeGame
         public ICommand PauseCommand { get; }
         public ICommand ResumeCommand { get; }
         public ICommand ExitCommand { get; }
-
-        // Команды для скорости
         public ICommand SetSlowSpeedCommand { get; }
         public ICommand SetMediumSpeedCommand { get; }
         public ICommand SetFastSpeedCommand { get; }
 
-        public ObservableCollection<Point> SnakeParts => new(model.SnakeParts);
+        public event EventHandler<int>? ScoreChanged;
+        public ObservableCollection<Point> SnakeParts => _snakeParts;
         public Point FoodPosition => model.FoodPosition;
         public int Score => model.Score;
 
@@ -48,12 +45,12 @@ namespace SnakeGame
         private bool _isGameStarted;
         private bool _isPaused;
         private Vector _nextDirection;
-        private int _gameSpeed = 150; // Средняя скорость по умолчанию
+        private int _gameSpeed = 150;
 
         public Vector NextDirection
         {
-            get { return _nextDirection; }
-            set { _nextDirection = value; }
+            get => _nextDirection;
+            set => _nextDirection = value;
         }
 
         public bool IsPaused
@@ -88,25 +85,27 @@ namespace SnakeGame
         public SnakeGameViewModel()
         {
             model = new SnakeGameModel();
+            _snakeParts = new ObservableCollection<Point>();
             model.InitializeGame();
 
             NextDirection = model.SnakeDirection;
 
-            // Инициализация команд управления
             MoveUpCommand = new RelayCommand(_ => ChangeDirection(Direction.Up));
             MoveDownCommand = new RelayCommand(_ => ChangeDirection(Direction.Down));
             MoveLeftCommand = new RelayCommand(_ => ChangeDirection(Direction.Left));
             MoveRightCommand = new RelayCommand(_ => ChangeDirection(Direction.Right));
-            Start = new RelayCommand(_ => {
+
+            Start = new RelayCommand(_ =>
+            {
                 StartGame();
                 CommandManager.InvalidateRequerySuggested();
             }, _ => !IsGameStarted);
+
             PauseCommand = new RelayCommand(_ => PauseGame(), _ => IsGameStarted && !IsPaused);
             ResumeCommand = new RelayCommand(_ => ResumeGame(), _ => IsGameStarted && IsPaused);
             RestartCommand = new RelayCommand(_ => RestartGame(), _ => IsGameStarted);
             ExitCommand = new RelayCommand(_ => ExitGame());
 
-            // Инициализация команд скорости
             SetSlowSpeedCommand = new RelayCommand(_ => SetGameSpeed(240), _ => !IsPaused);
             SetMediumSpeedCommand = new RelayCommand(_ => SetGameSpeed(190), _ => !IsPaused);
             SetFastSpeedCommand = new RelayCommand(_ => SetGameSpeed(80), _ => !IsPaused);
@@ -118,23 +117,15 @@ namespace SnakeGame
         private void SetGameSpeed(int speed)
         {
             _gameSpeed = speed;
-            if (gameTimer != null)
+            gameTimer.Interval = TimeSpan.FromMilliseconds(_gameSpeed);
+            if (!IsPaused && IsGameStarted)
             {
-                gameTimer.Interval = TimeSpan.FromMilliseconds(_gameSpeed);
-
-                // Если игра не на паузе, перезапускаем таймер с новой скоростью
-                if (!IsPaused && IsGameStarted)
-                {
-                    gameTimer.Stop();
-                    gameTimer.Start();
-                }
+                gameTimer.Stop();
+                gameTimer.Start();
             }
         }
 
-        private void ExitGame()
-        {
-            Application.Current.Shutdown();
-        }
+        private void ExitGame() => Application.Current.Shutdown();
 
         private void ResumeGame()
         {
@@ -174,11 +165,13 @@ namespace SnakeGame
             UpdateSnakeParts();
             IsGameStarted = true;
             GameRunning = true;
-            gameTimer.Interval = TimeSpan.FromMilliseconds(_gameSpeed); // Устанавливаем текущую скорость
+            gameTimer.Interval = TimeSpan.FromMilliseconds(_gameSpeed);
             gameTimer.Start();
+
             OnPropertyChanged(nameof(SnakeParts));
             OnPropertyChanged(nameof(FoodPosition));
             OnPropertyChanged(nameof(Score));
+            ScoreChanged?.Invoke(this, model.Score); // Добавим, чтобы сброс отобразился
         }
 
         private void ChangeDirection(Direction direction)
@@ -203,24 +196,28 @@ namespace SnakeGame
 
         private void GameLoop(object sender, EventArgs e)
         {
-            if (!GameRunning)
-                return;
+            if (!GameRunning) return;
+
             model.SnakeDirection = NextDirection;
             model.MoveSnake();
             UpdateSnakeParts();
 
             if (model.CheckCollisions())
             {
+                gameTimer.Stop();
                 MessageBox.Show($"Game Over! Your score: {model.Score}");
                 GameRunning = false;
-                StartGame();
+                IsGameStarted = false;
+                CommandManager.InvalidateRequerySuggested();
                 return;
             }
 
             if (model.CheckFoodCollision())
             {
                 OnPropertyChanged(nameof(Score));
+                ScoreChanged?.Invoke(this, model.Score); // <--- Вызов события
             }
+
 
             OnPropertyChanged(nameof(SnakeParts));
             OnPropertyChanged(nameof(FoodPosition));
@@ -228,10 +225,10 @@ namespace SnakeGame
 
         private void UpdateSnakeParts()
         {
-            SnakeParts.Clear();
+            _snakeParts.Clear();
             foreach (var part in model.SnakeParts)
             {
-                SnakeParts.Add(part);
+                _snakeParts.Add(part);
             }
         }
 

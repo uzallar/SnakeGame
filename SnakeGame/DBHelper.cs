@@ -12,7 +12,7 @@ namespace SnakeGame
 
         static DBHelper()
         {
-            var connStr = "Host=localhost;Port=5432;Username=postgres;Password=2705;Database=Gamers";
+            var connStr = "Host=localhost;Port=5432;Username=postgres;Password=1234;Database=Gamers";
             try
             {
                 _conn = new NpgsqlConnection(connStr);
@@ -59,7 +59,7 @@ namespace SnakeGame
             try
             {
                 using var cmd = _conn.CreateCommand();
-                cmd.CommandText = "SELECT id, username, password_hash FROM users WHERE username = @username";
+                cmd.CommandText = "SELECT id, username, password_hash, max_score FROM users WHERE username = @username";
                 cmd.Parameters.AddWithValue("username", username);
 
                 using var reader = cmd.ExecuteReader();
@@ -69,7 +69,8 @@ namespace SnakeGame
                     {
                         Id = reader.GetInt32(0),
                         Username = reader.GetString(1),
-                        PasswordHash = reader.GetString(2)
+                        PasswordHash = reader.GetString(2),
+                        MaxScore = reader.IsDBNull(3) ? 0 : reader.GetInt32(3)
                     };
                 }
                 return null;
@@ -80,6 +81,8 @@ namespace SnakeGame
                 return null;
             }
         }
+
+
 
         public static bool ValidateUser(string username, string password)
         {
