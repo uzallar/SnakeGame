@@ -41,6 +41,14 @@ namespace SnakeGame
             }
         }
 
+        private void ShowLeaderboard_Click(object sender, RoutedEventArgs e)
+        {
+            var leaderboardWindow = new LeaderboardWindow();
+            leaderboardWindow.Owner = this;
+            leaderboardWindow.ShowDialog();
+        }
+
+
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

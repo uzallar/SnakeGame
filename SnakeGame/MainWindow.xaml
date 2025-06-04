@@ -206,6 +206,17 @@
                     </StackPanel>
 
                     <!-- Кнопки -->
+                    <Button Content="Таблица лидеров"
+                            Click="ShowLeaderboard_Click"
+                            FontFamily="Comic Sans MS"
+                            FontSize="16"
+                            Padding="10,5"
+                            Margin="0,0,0,10"
+                            Background="#FFEF4C9E"
+                            Foreground="White"
+                            BorderBrush="Transparent"
+                            Cursor="Hand"/>
+
                     <Button Content="Продолжить"
                             Command="{Binding ResumeCommand}"
                             FontFamily="Comic Sans MS"

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
@@ -29,7 +30,6 @@ namespace SnakeGame
         {
             if (_conn == null) return null;
 
-            // Проверка на существование пользователя
             if (GetUserByUsername(username) != null)
                 return null;
 
@@ -82,8 +82,6 @@ namespace SnakeGame
             }
         }
 
-
-
         public static bool ValidateUser(string username, string password)
         {
             var user = GetUserByUsername(username);
@@ -127,5 +125,37 @@ namespace SnakeGame
                 MessageBox.Show($"Ошибка обновления счёта: {ex.Message}");
             }
         }
+
+        public static List<User> GetTopPlayers(int count)
+        {
+            var users = new List<User>();
+
+            if (_conn == null) return users;
+
+            try
+            {
+                using var cmd = _conn.CreateCommand();
+                cmd.CommandText = "SELECT id, username, max_score FROM users WHERE max_score IS NOT NULL ORDER BY max_score DESC LIMIT @count";
+                cmd.Parameters.AddWithValue("count", count);
+
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    users.Add(new User
+                    {
+                        Id = reader.GetInt32(0),
+                        Username = reader.GetString(1),
+                        MaxScore = reader.IsDBNull(2) ? 0 : reader.GetInt32(2)
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки таблицы лидеров: {ex.Message}");
+            }
+
+            return users;
+        }
+
     }
 }
