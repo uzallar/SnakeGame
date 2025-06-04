@@ -7,12 +7,50 @@
         Focusable="True"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="Змейка" Height="600" Width="700"
+        Title="Змейка" Height="630" Width="800"
         Background="#D0F0C0">
 
     <Window.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter2"/>
+        <!-- Стиль для кнопок скорости с закругленными углами, уменьшенный размер -->
+        <Style x:Key="RoundedSpeedButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FFEF4C9E"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <!-- меньше padding -->
+            <Setter Property="Margin" Value="8,0"/>
+            <Setter Property="MinWidth" Value="110"/>
+            <!-- меньше ширина -->
+            <Setter Property="MinHeight" Value="45"/>
+            <!-- меньше высота -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="12"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#D6336C"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#AAAAAA"/>
+                                <Setter Property="Foreground" Value="#666666"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Window.InputBindings>
@@ -131,10 +169,10 @@
 
                 <!-- Текст слева -->
                 <TextBlock Text="Выберите скорость змейки:"
-                           FontSize="16"
-                           FontWeight="Bold"
+                           FontSize="20"
+                           FontWeight="ExtraBold"
                            FontFamily="Comic Sans MS"
-                           Margin="0,0,10,30"
+                           Margin="0,0,15,30"
                            VerticalAlignment="Center">
                     <TextBlock.Foreground>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -147,35 +185,20 @@
                 <!-- Кнопки скорости -->
                 <Button Content="Медленно"
                         Command="{Binding SetSlowSpeedCommand}"
-                        Padding="10,5"
-                        Margin="0,0,5,30"
-                        FontFamily="Comic Sans MS"
-                        FontSize="14"
-                        Background="#FFEF4C9E"
-                        Foreground="White"
-                        BorderBrush="Transparent"
+                        Style="{StaticResource RoundedSpeedButtonStyle}"
+                        Margin="0,0,8,30"
                         IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
 
                 <Button Content="Средне"
                         Command="{Binding SetMediumSpeedCommand}"
-                        Padding="10,5"
-                        Margin="5,0,5,30"
-                        FontFamily="Comic Sans MS"
-                        FontSize="14"
-                        Background="#FFEF4C9E"
-                        Foreground="White"
-                        BorderBrush="Transparent"
+                        Style="{StaticResource RoundedSpeedButtonStyle}"
+                        Margin="0,0,8,30"
                         IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
 
                 <Button Content="Быстро"
                         Command="{Binding SetFastSpeedCommand}"
-                        Padding="10,5"
-                        Margin="5,0,0,30"
-                        FontFamily="Comic Sans MS"
-                        FontSize="14"
-                        Background="#FFEF4C9E"
-                        Foreground="White"
-                        BorderBrush="Transparent"
+                        Style="{StaticResource RoundedSpeedButtonStyle}"
+                        Margin="0,0,0,30"
                         IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
             </StackPanel>
         </Grid>
