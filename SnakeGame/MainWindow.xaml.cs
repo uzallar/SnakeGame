@@ -48,7 +48,23 @@ namespace SnakeGame
             leaderboardWindow.ShowDialog();
         }
 
+        private void ChangeUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logout();
+        }
 
+        private void Logout()
+        {
+            // Сброс текущего пользователя
+            currentUser = null;
+
+            // Открыть стартовое окно с выбором входа/регистрации
+            var startWindow = new StartWindow();
+            startWindow.Show();
+
+            // Закрыть текущее окно
+            this.Close();
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
