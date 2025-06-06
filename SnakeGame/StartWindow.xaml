@@ -151,8 +151,8 @@
             </StackPanel>
 
             <!-- Кнопки с увеличенным шрифтом -->
-            <Button Content="Вход" Margin="9" Click="Login_Click" Height="45" FontSize="24" />
-            <Button Content="Регистрация" Margin="9" Click="Register_Click" Height="45" FontSize="24" />
+            <Button Content="Вход" Margin="9" Click="Register_and_Login_Click" Height="45" FontSize="24" />
+            <Button Content="Регистрация" Margin="9" Click="Register_and_Login_Click" Height="45" FontSize="24" />
         </StackPanel>
     </Grid>
 

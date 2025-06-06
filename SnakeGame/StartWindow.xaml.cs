@@ -12,18 +12,13 @@ namespace SnakeGame
             InitializeComponent();
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+        private void Register_and_Login_Click(object sender, RoutedEventArgs e)
         {
             var loginWindow = new LoginWindow();
             loginWindow.Show();
             Close();
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
-        {
-            var registerWindow = new RegisterWindow();
-            registerWindow.Show();
-            Close();
-        }
+
     }
 }
