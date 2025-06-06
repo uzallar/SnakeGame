@@ -10,15 +10,7 @@ namespace SnakeGame
         public StartWindow()
         {
             InitializeComponent();
+            DataContext = new StartWindowView();
         }
-
-        private void Register_and_Login_Click(object sender, RoutedEventArgs e)
-        {
-            var loginWindow = new LoginWindow();
-            loginWindow.Show();
-            Close();
-        }
-
-
     }
 }

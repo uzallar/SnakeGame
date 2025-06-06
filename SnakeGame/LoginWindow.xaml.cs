@@ -1,7 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SnakeGame
 {
@@ -10,61 +8,15 @@ namespace SnakeGame
         public LoginWindow()
         {
             InitializeComponent();
+            DataContext = new LoginViewModel();
         }
 
-        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            string username = UsernameTextBox.Text.Trim();
-            string password = PasswordBox.Password;
-
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (DataContext is LoginViewModel viewModel)
             {
-                MessageBox.Show("Введите имя пользователя и пароль");
-                return;
-            }
-
-            if (DBHelper.ValidateUser(username, password))
-            {
-                var user = DBHelper.GetUserByUsername(username);
-                MessageBox.Show($"Добро пожаловать, {user.Username}!");
-                var mainWin = new MainWindow(user);
-                mainWin.Show();
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Неверные имя пользователя или пароль");
-            }
-        }
-
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-            string username = UsernameTextBox.Text.Trim();
-            string password = PasswordBox.Password;
-
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("Введите имя пользователя и пароль");
-                return;
-            }
-
-            var existingUser = DBHelper.GetUserByUsername(username);
-            if (existingUser != null)
-            {
-                MessageBox.Show("Пользователь с таким именем уже существует");
-                return;
-            }
-
-            var newUser = DBHelper.CreateUser(username, password);
-            if (newUser != null)
-            {
-                MessageBox.Show($"Пользователь {newUser.Username} успешно зарегистрирован");
-            }
-            else
-            {
-                MessageBox.Show("Ошибка при регистрации пользователя");
+                viewModel.Password = ((PasswordBox)sender).Password;
             }
         }
     }
 }
-

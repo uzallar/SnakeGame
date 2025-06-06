@@ -26,7 +26,7 @@ namespace SnakeGame
         public int SnakeLength { get; set; }
         public Point FoodPosition { get; set; }
         public int Score { get; set; }
-        public SnakeSpeed CurrentSpeed { get; set; } = SnakeSpeed.Medium; // По умолчанию средняя
+        public SnakeSpeed CurrentSpeed { get; set; } = SnakeSpeed.Medium;
 
         private Random random;
 

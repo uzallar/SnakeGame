@@ -47,7 +47,7 @@
             <!-- Панель с рекордом -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
                 <TextBlock Text="Рекорд: " FontSize="24" FontWeight="Bold" FontFamily="Comic Sans MS"/>
-                <TextBlock x:Name="MaxScoreTextBlock" FontSize="24" FontWeight="Bold" Foreground="Black" FontFamily="Comic Sans MS"/>
+                <TextBlock x:Name="MaxScoreTextBlock" Text="{Binding MaxScoreText}"  FontSize="24" FontWeight="Bold" Foreground="Black" FontFamily="Comic Sans MS"/>
             </StackPanel>
 
             <!-- Игровое поле -->
@@ -96,7 +96,7 @@
 
             <!-- Текущий счёт -->
             <TextBlock x:Name="ScoreText" 
-                       Text="Очки: " FontSize="24" FontWeight="ExtraBold" 
+                       Text="{Binding Score, StringFormat='Очки: {0}'}" FontSize="24" FontWeight="ExtraBold" 
                        HorizontalAlignment="Center" TextAlignment="Center" 
                        FontFamily="Comic Sans MS" Width="650" Grid.Row="0">
                 <TextBlock.Foreground>
@@ -207,7 +207,7 @@
 
                     <!-- Кнопки -->
                     <Button Content="Таблица лидеров"
-                            Click="ShowLeaderboard_Click"
+                            Command="{Binding ShowLeaderboardCommand}"
                             FontFamily="Comic Sans MS"
                             FontSize="16"
                             Padding="10,5"
@@ -240,7 +240,7 @@
                             Cursor="Hand"/>
 
                     <Button Content="Сменить пользователя"
-                            Click="ChangeUserButton_Click"
+                            Command="{Binding ChangeUserCommand}"
                             FontFamily="Comic Sans MS"
                             FontSize="16"
                             Padding="10,5"

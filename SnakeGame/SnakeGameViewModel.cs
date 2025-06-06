@@ -18,9 +18,12 @@ namespace SnakeGame
 {
     public class SnakeGameViewModel : INotifyPropertyChanged
     {
+        private readonly User _currentUser;
         private SnakeGameModel model;
         private DispatcherTimer gameTimer;
         private ObservableCollection<Point> _snakeParts;
+        public string WindowTitle => $"Snake Game — {_currentUser?.Username ?? "Guest"}";
+        public string MaxScoreText => _currentUser?.MaxScore.ToString() ?? "0";
 
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
@@ -34,11 +37,15 @@ namespace SnakeGame
         public ICommand SetSlowSpeedCommand { get; }
         public ICommand SetMediumSpeedCommand { get; }
         public ICommand SetFastSpeedCommand { get; }
+        public ICommand ShowLeaderboardCommand { get; }
+        public ICommand ChangeUserCommand { get; }
+
 
         public event EventHandler<int>? ScoreChanged;
         public ObservableCollection<Point> SnakeParts => _snakeParts;
         public Point FoodPosition => model.FoodPosition;
         public int Score => model.Score;
+
 
         private bool _gameRunning = true;
         private bool _isGameStarted;
@@ -81,10 +88,20 @@ namespace SnakeGame
             set => _gameRunning = value;
         }
 
-        public SnakeGameViewModel()
+        public SnakeGameViewModel(User user = null)
         {
             model = new SnakeGameModel();
             _snakeParts = new ObservableCollection<Point>();
+            _currentUser = user;
+
+            if (_currentUser != null)
+            {
+                ScoreChanged += OnScoreChanged;
+            }
+
+            ShowLeaderboardCommand = new RelayCommand(_ => ShowLeaderboard());
+            ChangeUserCommand = new RelayCommand(_ => ChangeUser());
+
             model.InitializeGame();
 
             NextDirection = model.SnakeDirection;
@@ -111,6 +128,41 @@ namespace SnakeGame
 
             gameTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(_gameSpeed) };
             gameTimer.Tick += GameLoop;
+        }
+        private void OnScoreChanged(object sender, int newScore)
+        {
+            if (_currentUser != null && newScore > _currentUser.MaxScore)
+            {
+                _currentUser.MaxScore = newScore;
+                OnPropertyChanged(nameof(MaxScoreText));
+                DBHelper.UpdateMaxScore(_currentUser.Id, newScore);
+            }
+        }
+        private void ShowLeaderboard()
+        {
+            var leaderboardWindow = new LeaderboardWindow();
+            leaderboardWindow.ShowDialog();
+        }
+
+        private void ChangeUser()
+        {
+            var result = MessageBox.Show("Вы действительно хотите сменить пользователя?",
+                                       "Подтверждение",
+                                       MessageBoxButton.YesNo,
+                                       MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                Logout();
+            }
+        }
+
+        private void Logout()
+        {
+            var startWindow = new StartWindow();
+            startWindow.Show();
+
+            Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
         }
 
         private void SetGameSpeed(int speed, SnakeSpeed speedLevel)
