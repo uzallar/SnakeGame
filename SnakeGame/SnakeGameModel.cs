@@ -7,6 +7,13 @@ using System.Windows;
 
 namespace SnakeGame
 {
+    public enum SnakeSpeed
+    {
+        Slow,
+        Medium,
+        Fast
+    }
+
     public class SnakeGameModel
     {
         public const int SnakeSize = 20;
@@ -19,6 +26,7 @@ namespace SnakeGame
         public int SnakeLength { get; set; }
         public Point FoodPosition { get; set; }
         public int Score { get; set; }
+        public SnakeSpeed CurrentSpeed { get; set; } = SnakeSpeed.Medium; // По умолчанию средняя
 
         private Random random;
 
@@ -65,7 +73,6 @@ namespace SnakeGame
                 random.Next(0, maxX) * SnakeSize,
                 random.Next(0, maxY) * SnakeSize);
 
-            // Проверка, чтобы еда не появилась на змейке
             foreach (var part in SnakeParts)
             {
                 if (part == FoodPosition)
@@ -96,14 +103,12 @@ namespace SnakeGame
 
         public bool CheckCollisions()
         {
-            // Проверка столкновения с границами
             if (SnakeHeadPosition.X < 0 || SnakeHeadPosition.X > GameAreaWidth - SnakeSize ||
                 SnakeHeadPosition.Y < 0 || SnakeHeadPosition.Y > GameAreaHeight - SnakeSize)
             {
                 return true;
             }
 
-            // Проверка столкновения с собой
             for (int i = 3; i < SnakeParts.Count; i++)
             {
                 if (SnakeHeadPosition == SnakeParts[i])
@@ -119,7 +124,19 @@ namespace SnakeGame
         {
             if (SnakeHeadPosition == FoodPosition)
             {
-                Score += 10;
+                switch (CurrentSpeed)
+                {
+                    case SnakeSpeed.Slow:
+                        Score += 10;
+                        break;
+                    case SnakeSpeed.Medium:
+                        Score += 20;
+                        break;
+                    case SnakeSpeed.Fast:
+                        Score += 30;
+                        break;
+                }
+
                 AddSnakePart();
                 CreateFood();
                 return true;

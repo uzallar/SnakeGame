@@ -7,7 +7,7 @@
         Focusable="True"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="Змейка" Height="600" Width="700"
+        Title="Змейка" Height="630" Width="700"
         Background="#D0F0C0">
 
     <Window.Resources>

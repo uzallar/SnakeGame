@@ -22,7 +22,6 @@ namespace SnakeGame
         private DispatcherTimer gameTimer;
         private ObservableCollection<Point> _snakeParts;
 
-        // Команды
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
         public ICommand MoveLeftCommand { get; }
@@ -106,17 +105,18 @@ namespace SnakeGame
             RestartCommand = new RelayCommand(_ => RestartGame(), _ => IsGameStarted);
             ExitCommand = new RelayCommand(_ => ExitGame());
 
-            SetSlowSpeedCommand = new RelayCommand(_ => SetGameSpeed(240), _ => !IsPaused);
-            SetMediumSpeedCommand = new RelayCommand(_ => SetGameSpeed(190), _ => !IsPaused);
-            SetFastSpeedCommand = new RelayCommand(_ => SetGameSpeed(80), _ => !IsPaused);
+            SetSlowSpeedCommand = new RelayCommand(_ => SetGameSpeed(240, SnakeSpeed.Slow), _ => !IsPaused);
+            SetMediumSpeedCommand = new RelayCommand(_ => SetGameSpeed(190, SnakeSpeed.Medium), _ => !IsPaused);
+            SetFastSpeedCommand = new RelayCommand(_ => SetGameSpeed(80, SnakeSpeed.Fast), _ => !IsPaused);
 
             gameTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(_gameSpeed) };
             gameTimer.Tick += GameLoop;
         }
 
-        private void SetGameSpeed(int speed)
+        private void SetGameSpeed(int speed, SnakeSpeed speedLevel)
         {
             _gameSpeed = speed;
+            model.CurrentSpeed = speedLevel;
             gameTimer.Interval = TimeSpan.FromMilliseconds(_gameSpeed);
             if (!IsPaused && IsGameStarted)
             {
@@ -171,7 +171,7 @@ namespace SnakeGame
             OnPropertyChanged(nameof(SnakeParts));
             OnPropertyChanged(nameof(FoodPosition));
             OnPropertyChanged(nameof(Score));
-            ScoreChanged?.Invoke(this, model.Score); // Добавим, чтобы сброс отобразился
+            ScoreChanged?.Invoke(this, model.Score);
         }
 
         private void ChangeDirection(Direction direction)
@@ -215,9 +215,8 @@ namespace SnakeGame
             if (model.CheckFoodCollision())
             {
                 OnPropertyChanged(nameof(Score));
-                ScoreChanged?.Invoke(this, model.Score); // <--- Вызов события
+                ScoreChanged?.Invoke(this, model.Score);
             }
-
 
             OnPropertyChanged(nameof(SnakeParts));
             OnPropertyChanged(nameof(FoodPosition));
