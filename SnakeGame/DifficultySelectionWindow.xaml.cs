@@ -14,14 +14,12 @@ using System.Windows.Shapes;
 
 namespace SnakeGame
 {
-    /// <summary>
-    /// Логика взаимодействия для DifficultySelectionWindow.xaml
-    /// </summary>
     public partial class DifficultySelectionWindow : Window
     {
         public DifficultySelectionWindow()
         {
             InitializeComponent();
+            DataContext = new DifficultySelectionViewModel();
         }
     }
 }

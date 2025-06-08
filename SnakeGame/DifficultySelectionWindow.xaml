@@ -5,8 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnakeGame"
         mc:Ignorable="d"
-        Title="DifficultySelectionWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Выбор сложности" 
+        Height="300" 
+        Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#FFFDE6F2">
+
+    <Border BorderBrush="#FFD6336C" BorderThickness="3" CornerRadius="20" Margin="10">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Выберите сложность" 
+                       FontSize="24" 
+                       FontWeight="Bold"
+                       FontFamily="Comic Sans MS"
+                       Margin="0,0,0,20"
+                       HorizontalAlignment="Center">
+                <TextBlock.Foreground>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#FFEF4C9E" Offset="0"/>
+                        <GradientStop Color="#FFD6336C" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBlock.Foreground>
+            </TextBlock>
+
+            <Button Content="Медленно" 
+                    Command="{Binding SetSlowCommand}"
+                    FontFamily="Comic Sans MS"
+                    FontSize="16"
+                    Padding="20,10"
+                    Margin="0,0,0,10"
+                    Background="#FFEF4C9E"
+                    Foreground="White"
+                    BorderBrush="Transparent"/>
+
+            <Button Content="Средне" 
+                    Command="{Binding SetMediumCommand}"
+                    FontFamily="Comic Sans MS"
+                    FontSize="16"
+                    Padding="20,10"
+                    Margin="0,0,0,10"
+                    Background="#FFEF4C9E"
+                    Foreground="White"
+                    BorderBrush="Transparent"/>
+
+            <Button Content="Быстро" 
+                    Command="{Binding SetFastCommand}"
+                    FontFamily="Comic Sans MS"
+                    FontSize="16"
+                    Padding="20,10"
+                    Background="#FFEF4C9E"
+                    Foreground="White"
+                    BorderBrush="Transparent"/>
+        </StackPanel>
+    </Border>
 </Window>

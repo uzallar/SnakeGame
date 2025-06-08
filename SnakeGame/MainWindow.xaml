@@ -12,7 +12,6 @@
 
     <Window.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter2"/>
     </Window.Resources>
 
     <Window.InputBindings>
@@ -107,63 +106,7 @@
                 </TextBlock.Foreground>
             </TextBlock>
 
-            <!-- Выбор скорости змейки и кнопки -->
-            <StackPanel Orientation="Vertical"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Margin="0,15,0,0"
-                        Panel.ZIndex="100"
-                        Visibility="{Binding IsGameStarted, Converter={StaticResource BoolToVisibilityConverter}}"
-                        Grid.Row="1">
 
-                <TextBlock Text="Выберите скорость змейки:"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           FontFamily="Comic Sans MS"
-                           Margin="0,0,0,10" HorizontalAlignment="Center">
-                    <TextBlock.Foreground>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                            <GradientStop Color="#FFEF4C9E" Offset="0"/>
-                            <GradientStop Color="#FFD6336C" Offset="1"/>
-                        </LinearGradientBrush>
-                    </TextBlock.Foreground>
-                </TextBlock>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Медленно"
-                            Command="{Binding SetSlowSpeedCommand}"
-                            Padding="10,5"
-                            Margin="0,0,5,0"
-                            FontFamily="Comic Sans MS"
-                            FontSize="14"
-                            Background="#FFEF4C9E"
-                            Foreground="White"
-                            BorderBrush="Transparent"
-                            IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
-
-                    <Button Content="Средне"
-                            Command="{Binding SetMediumSpeedCommand}"
-                            Padding="10,5"
-                            Margin="5,0,5,0"
-                            FontFamily="Comic Sans MS"
-                            FontSize="14"
-                            Background="#FFEF4C9E"
-                            Foreground="White"
-                            BorderBrush="Transparent"
-                            IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
-
-                    <Button Content="Быстро"
-                            Command="{Binding SetFastSpeedCommand}"
-                            Padding="10,5"
-                            Margin="5,0,0,0"
-                            FontFamily="Comic Sans MS"
-                            FontSize="14"
-                            Background="#FFEF4C9E"
-                            Foreground="White"
-                            BorderBrush="Transparent"
-                            IsEnabled="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
-                </StackPanel>
-            </StackPanel>
         </Grid>
 
         <!-- Кнопка Start - на весь экран -->
@@ -176,7 +119,7 @@
 
         <!-- Оверлей паузы -->
         <Grid Background="#80000000"
-              Visibility="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter2}}"
+              Visibility="{Binding IsPaused, Converter={StaticResource BoolToVisibilityConverter}}"
               IsHitTestVisible="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Grid.RowSpan="3">
             <Border Background="#FFFDE6F2"
@@ -230,6 +173,16 @@
 
                     <Button Content="Рестарт"
                             Command="{Binding RestartCommand}"
+                            FontFamily="Comic Sans MS"
+                            FontSize="16"
+                            Padding="10,5"
+                            Margin="0,0,0,10"
+                            Background="#FFEF4C9E"
+                            Foreground="White"
+                            BorderBrush="Transparent"
+                            Cursor="Hand"/>
+                    <Button Content="Сменить сложность"
+                            Command="{Binding ChangeDifficultyCommand}"
                             FontFamily="Comic Sans MS"
                             FontSize="16"
                             Padding="10,5"

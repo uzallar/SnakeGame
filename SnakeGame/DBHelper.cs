@@ -14,7 +14,7 @@ namespace SnakeGame
         static DBHelper()
         {
             var mainDbName = "Gamers";
-            var adminConnStr = "Host=localhost;Port=5432;Username=postgres;Password=blue;Database=postgres";
+            var adminConnStr = "Host=localhost;Port=5432;Username=postgres;Password=12345678;Database=postgres";
 
             try
             {
@@ -37,7 +37,7 @@ namespace SnakeGame
                 }
 
                 // Шаг 2: Подключаемся к созданной БД
-                var connStr = $"Host=localhost;Port=5432;Username=postgres;Password=blue;Database={mainDbName}";
+                var connStr = $"Host=localhost;Port=5432;Username=postgres;Password=12345678;Database={mainDbName}";
                 _conn = new NpgsqlConnection(connStr);
                 _conn.Open();
 
