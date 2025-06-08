@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SnakeGame;
+using static SnakeGame.ViewModels.LeaderboardViewModel;
+
 
 namespace SnakeGame.ViewModels
 {
@@ -13,19 +15,49 @@ namespace SnakeGame.ViewModels
         public int Score { get; set; }
     }
 
+    public interface IDBHelper
+    {
+        IEnumerable<User> GetTopPlayers(int count);
+    }
+
+    // Реальная реализация для production
+    public class DBHelperWrapper : IDBHelper
+    {
+        public IEnumerable<User> GetTopPlayers(int count)
+        {
+            return DBHelper.GetTopPlayers(count);
+        }
+    }
+
+    // Фейковая реализация для тестов
+    public class FakeDBHelper : IDBHelper
+    {
+        public List<User> TestUsers { get; } = new List<User>();
+
+        public IEnumerable<User> GetTopPlayers(int count)
+        {
+            return TestUsers
+                .OrderByDescending(u => u.MaxScore)
+                .Take(count);
+        }
+    }
+
     public class LeaderboardViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<LeaderboardEntry> TopPlayers { get; set; }
+        public ObservableCollection<LeaderboardEntry> TopPlayers { get; private set; }
 
-        public LeaderboardViewModel()
+        private readonly IDBHelper _dbHelper;
+
+        public LeaderboardViewModel(IDBHelper dbHelper = null)
         {
+            _dbHelper = dbHelper ?? new DBHelperWrapper();
             LoadLeaderboard();
         }
 
-        private void LoadLeaderboard()
+        public void LoadLeaderboard()
         {
             TopPlayers = new ObservableCollection<LeaderboardEntry>();
-            var topUsers = DBHelper.GetTopPlayers(10);
+            var topUsers = _dbHelper.GetTopPlayers(10); // Используем инжектированную зависимость
             int rank = 1;
 
             foreach (var user in topUsers)
