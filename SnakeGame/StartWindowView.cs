@@ -12,6 +12,9 @@ namespace SnakeGame
     public class StartWindowView: INotifyPropertyChanged
     {
         public ICommand RegisterAndLoginCommand { get; }
+        public Action OpenLoginWindowAction { get; set; }
+        public Action CloseStartWindowAction { get; set; }
+
 
         public StartWindowView() {
             RegisterAndLoginCommand = new RelayCommand(_ =>

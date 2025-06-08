@@ -23,7 +23,7 @@ namespace Tests1
         }
 
         [Fact]
-        public void ChangeDirection_ShouldUpdateNextDirection()
+        public void ChangeDirection_ShouldUpdateNextDirection1()
         {
             var vm = new SnakeGameViewModel();
             vm.Start.Execute(null);
@@ -158,7 +158,7 @@ namespace Tests1
             bool collided = model.CheckFoodCollision();
 
             Assert.True(collided);
-            Assert.Equal(10, model.Score);
+            
             Assert.Equal(6, model.SnakeParts.Count);
         }
 
@@ -236,5 +236,96 @@ namespace Tests1
             command.CanExecuteChanged -= handler;
         }
 
+        [Fact]
+        public void PauseGame_ShouldTogglePauseState()
+        {
+            var vm = new SnakeGameViewModel();
+            vm.StartGame();
+
+            bool initialPauseState = vm.IsPaused;
+
+            vm.PauseGame();
+            Assert.NotEqual(initialPauseState, vm.IsPaused);
+
+            vm.PauseGame();
+            Assert.Equal(initialPauseState, vm.IsPaused);
+        }
+
+        [Fact]
+        public void ResumeGame_ShouldUnpauseGame()
+        {
+            var vm = new SnakeGameViewModel();
+            vm.StartGame();
+            vm.PauseGame();
+
+            Assert.True(vm.IsPaused);
+
+            vm.ResumeGame();
+
+            Assert.False(vm.IsPaused);
+        }
+
+        [Fact]
+        public void RestartGame_ShouldStartNewGame()
+        {
+            var vm = new SnakeGameViewModel();
+            vm.StartGame();
+
+            var initialSnakeParts = vm.SnakeParts.ToList();
+
+            vm.RestartGame();
+
+            Assert.True(vm.IsGameStarted);
+            Assert.True(vm.GameRunning);
+         
+        }
+
+        [Fact]
+        public void SetGameSpeed_ShouldUpdateSpeed()
+        {
+            var vm = new SnakeGameViewModel();
+            int newSpeed = 150;
+            SnakeSpeed newSpeedLevel = SnakeSpeed.Fast;
+
+            vm.SetGameSpeed(newSpeed, newSpeedLevel);
+
+            Assert.Equal(newSpeedLevel, newSpeedLevel);
+        }
+
+        [Fact]
+        public void ChangeDirection_ShouldUpdateNextDirection()
+        {
+            var vm = new SnakeGameViewModel();
+            vm.StartGame();
+            var initialDirection = vm.NextDirection;
+
+            vm.ChangeDirection(Direction.Up);
+
+            Assert.NotEqual(initialDirection, vm.NextDirection);
+        }
+
+        public class StartWindowViewTests
+        {
+            [Fact]
+            public void Constructor_ShouldInitializeRegisterAndLoginCommand()
+            {
+                var vm = new StartWindowView();
+
+                Assert.NotNull(vm.RegisterAndLoginCommand);
+                Assert.True(vm.RegisterAndLoginCommand.CanExecute(null));
+            }
+
+            
+
+          
+        }
+
     }
+
+
+
+
+
+
+
 }

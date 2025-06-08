@@ -18,10 +18,14 @@ namespace SnakeGame
 {
     public class SnakeGameViewModel : INotifyPropertyChanged
     {
-        private readonly User _currentUser;
-        private SnakeGameModel model;
+        public readonly User _currentUser;
+        public SnakeGameModel model;
         private DispatcherTimer gameTimer;
         private ObservableCollection<Point> _snakeParts;
+       
+
+
+
         public string WindowTitle => $"Snake Game — {_currentUser?.Username ?? "Guest"}";
         public string MaxScoreText => _currentUser?.MaxScore.ToString() ?? "0";
 
@@ -165,7 +169,7 @@ namespace SnakeGame
             Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
         }
 
-        private void SetGameSpeed(int speed, SnakeSpeed speedLevel)
+        public void SetGameSpeed(int speed, SnakeSpeed speedLevel)
         {
             _gameSpeed = speed;
             model.CurrentSpeed = speedLevel;
@@ -177,9 +181,9 @@ namespace SnakeGame
             }
         }
 
-        private void ExitGame() => Application.Current.Shutdown();
+        public void ExitGame() => Application.Current.Shutdown();
 
-        private void ResumeGame()
+        public void ResumeGame()
         {
             if (IsPaused)
             {
@@ -189,7 +193,7 @@ namespace SnakeGame
             }
         }
 
-        private void PauseGame()
+        public void PauseGame()
         {
             if (!IsGameStarted || !GameRunning) return;
             IsPaused = !IsPaused;
@@ -199,7 +203,7 @@ namespace SnakeGame
                 gameTimer.Start();
         }
 
-        private void RestartGame()
+        public void RestartGame()
         {
             StartGame();
             if (IsPaused)
@@ -210,7 +214,7 @@ namespace SnakeGame
             CommandManager.InvalidateRequerySuggested();
         }
 
-        private void StartGame()
+        public void StartGame()
         {
             model.InitializeGame();
             NextDirection = model.SnakeDirection;
@@ -226,7 +230,7 @@ namespace SnakeGame
             ScoreChanged?.Invoke(this, model.Score);
         }
 
-        private void ChangeDirection(Direction direction)
+        public void ChangeDirection(Direction direction)
         {
             if (!IsPaused)
             {
@@ -246,7 +250,7 @@ namespace SnakeGame
             }
         }
 
-        private void GameLoop(object sender, EventArgs e)
+        public void GameLoop(object sender, EventArgs e)
         {
             if (!GameRunning) return;
 
@@ -274,7 +278,7 @@ namespace SnakeGame
             OnPropertyChanged(nameof(FoodPosition));
         }
 
-        private void UpdateSnakeParts()
+        public void UpdateSnakeParts()
         {
             _snakeParts.Clear();
             foreach (var part in model.SnakeParts)
@@ -286,5 +290,7 @@ namespace SnakeGame
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+       
     }
 }
