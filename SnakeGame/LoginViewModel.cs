@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -41,16 +42,14 @@ namespace SnakeGame
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
-                MessageBox.Show("Введите имя пользователя и пароль", "Ошибка",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                PinkMessageBox.Show("Введите имя пользователя и пароль");
                 return;
             }
 
             if (DBHelper.ValidateUser(Username, Password))
             {
                 var user = DBHelper.GetUserByUsername(Username);
-                MessageBox.Show($"Добро пожаловать, {user.Username}!", "Успех",
-                              MessageBoxButton.OK, MessageBoxImage.Information);
+                PinkMessageBox.Show($"Добро пожаловать, {user.Username}!");
 
                 var mainWindow = new MainWindow(user);
                 mainWindow.Show();
@@ -58,8 +57,7 @@ namespace SnakeGame
             }
             else
             {
-                MessageBox.Show("Неверные имя пользователя или пароль", "Ошибка",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                PinkMessageBox.Show("Неверные имя пользователя или пароль");
             }
         }
 
@@ -67,29 +65,25 @@ namespace SnakeGame
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
-                MessageBox.Show("Введите имя пользователя и пароль", "Ошибка",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                PinkMessageBox.Show("Введите имя пользователя и пароль");
                 return;
             }
 
             var existingUser = DBHelper.GetUserByUsername(Username);
             if (existingUser != null)
             {
-                MessageBox.Show("Пользователь с таким именем уже существует", "Ошибка",
-                              MessageBoxButton.OK, MessageBoxImage.Warning);
+                PinkMessageBox.Show("Пользователь с таким именем уже существует");
                 return;
             }
 
             var newUser = DBHelper.CreateUser(Username, Password);
             if (newUser != null)
             {
-                MessageBox.Show($"Пользователь {newUser.Username} успешно зарегистрирован",
-                              "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                PinkMessageBox.Show($"Пользователь {newUser.Username} успешно зарегистрирован");
             }
             else
             {
-                MessageBox.Show("Ошибка при регистрации пользователя", "Ошибка",
-                              MessageBoxButton.OK, MessageBoxImage.Error);
+                PinkMessageBox.Show("Ошибка при регистрации пользователя");
             }
         }
 

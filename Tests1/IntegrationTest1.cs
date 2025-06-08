@@ -342,7 +342,7 @@ namespace Tests1
                 var viewModel = new LeaderboardViewModel(fakeDbHelper);
 
                 // Assert - проверяем только логику ViewModel
-                Assert.Equal(3, viewModel.TopPlayers.Count);
+                Assert.Equal(33, viewModel.TopPlayers.Count);
                 Assert.Equal("Bob", viewModel.TopPlayers[0].Username);
                 Assert.Equal(200, viewModel.TopPlayers[0].Score);
                 Assert.Equal(1, viewModel.TopPlayers[0].Rank);

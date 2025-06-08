@@ -150,10 +150,7 @@ namespace SnakeGame
 
         private void ChangeUser()
         {
-            var result = MessageBox.Show("Вы действительно хотите сменить пользователя?",
-                                       "Подтверждение",
-                                       MessageBoxButton.YesNo,
-                                       MessageBoxImage.Question);
+            var result = PinkMessageBox.Show("Вы действительно хотите сменить пользователя?", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {
@@ -261,7 +258,7 @@ namespace SnakeGame
             if (model.CheckCollisions())
             {
                 gameTimer.Stop();
-                MessageBox.Show($"Game Over! Your score: {model.Score}");
+                PinkMessageBox.Show($"Игра окончена! Ты съел: {model.Score}");
                 GameRunning = false;
                 IsGameStarted = false;
                 CommandManager.InvalidateRequerySuggested();
