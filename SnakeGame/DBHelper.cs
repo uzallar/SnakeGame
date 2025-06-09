@@ -76,7 +76,7 @@ namespace SnakeGame
         {
             if (_conn == null) return null;
 
-            if (string.IsNullOrWhiteSpace(username) || username.Length > 99)
+            if (string.IsNullOrWhiteSpace(username) || username.Length > 30)
             {
                 PinkMessageBox.Show("Имя пользователя должно содержать от 1 до 30 символов.");
                 return null;
