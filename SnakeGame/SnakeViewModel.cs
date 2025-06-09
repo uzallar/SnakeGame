@@ -96,7 +96,6 @@ namespace SnakeGame
             _snakeParts = new ObservableCollection<Point>();
             _currentUser = user;
 
-            // Устанавливаем скорость в зависимости от выбранной сложности
             var speed = selectedSpeed ?? SnakeSpeed.Medium;
 
             switch (speed)
@@ -168,10 +167,7 @@ namespace SnakeGame
 
         private void ChangeUser()
         {
-            var result = MessageBox.Show("Вы действительно хотите сменить пользователя?",
-                                       "Подтверждение",
-                                       MessageBoxButton.YesNo,
-                                       MessageBoxImage.Question);
+            var result = PinkMessageBox.Show("Вы действительно хотите сменить пользователя?", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {
@@ -279,7 +275,7 @@ namespace SnakeGame
             if (model.CheckCollisions())
             {
                 gameTimer.Stop();
-                MessageBox.Show($"Game Over! Your score: {model.Score}");
+                PinkMessageBox.Show($"Игра окончена! Ты съел: {model.Score}");
                 GameRunning = false;
                 IsGameStarted = false;
                 CommandManager.InvalidateRequerySuggested();
@@ -310,28 +306,20 @@ namespace SnakeGame
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         private void ChangeDifficulty()
         {
-            // Сохраняем текущее состояние паузы
             bool wasPaused = IsPaused;
 
-            // Временно выходим из паузы
             IsPaused = false;
 
-            // Даем время на обновление UI
             Application.Current.Dispatcher.Invoke(() => { }, DispatcherPriority.Background);
 
-            // Показываем окно выбора сложности
             var difficultyWindow = new DifficultySelectionWindow();
             if (difficultyWindow.ShowDialog() == true)
             {
-                // Даем время на закрытие окна
                 Application.Current.Dispatcher.Invoke(() => { }, DispatcherPriority.Background);
 
-                // Теперь показываем MessageBox
-                var result = MessageBox.Show(
+                var result = PinkMessageBox.Show(
                     "При смене сложности текущая игра будет сброшена. Продолжить?",
-                    "Подтверждение",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
+                    MessageBoxButton.YesNo);
 
                 if (result == MessageBoxResult.Yes)
                 {
@@ -352,13 +340,11 @@ namespace SnakeGame
                 }
                 else
                 {
-                    // Восстанавливаем паузу
                     IsPaused = wasPaused;
                 }
             }
             else
             {
-                // Восстанавливаем паузу
                 IsPaused = wasPaused;
             }
         }
