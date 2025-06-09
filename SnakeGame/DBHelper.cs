@@ -82,9 +82,9 @@ namespace SnakeGame
                 return null;
             }
 
-            if (password.Length < 6 || password.Length > 99)
+            if (password.Length < 6 || password.Length > 100)
             {
-                PinkMessageBox.Show("Пароль должен содержать от 6 до 30 символов.");
+                PinkMessageBox.Show("Пароль должен содержать от 6 до 100 символов.");
                 return null;
             }
 
