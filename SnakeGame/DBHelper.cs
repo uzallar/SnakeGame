@@ -14,10 +14,11 @@ namespace SnakeGame
         static DBHelper()
         {
             var mainDbName = "Gamers";
-            var adminConnStr = "Host=localhost;Port=5432;Username=postgres;Password=1234;Database=postgres";
+            var adminConnStr = "Host=localhost;Port=5432;Username=postgres;Password=12345678;Database=postgres";
 
             try
             {
+                // Шаг 1: Подключаемся к postgres и создаем БД, если её нет
                 using var adminConn = new NpgsqlConnection(adminConnStr);
                 adminConn.Open();
 
@@ -35,10 +36,12 @@ namespace SnakeGame
                     }
                 }
 
-                var connStr = $"Host=localhost;Port=5432;Username=postgres;Password=1234;Database={mainDbName}";
+                // Шаг 2: Подключаемся к созданной БД
+                var connStr = $"Host=localhost;Port=5432;Username=postgres;Password=12345678;Database={mainDbName}";
                 _conn = new NpgsqlConnection(connStr);
                 _conn.Open();
 
+                // Шаг 3: Создаём таблицу users, если её нет
                 InitializeDatabase();
             }
             catch (Exception ex)
@@ -57,12 +60,11 @@ namespace SnakeGame
                 using var cmd = _conn.CreateCommand();
                 cmd.CommandText = @"
                     CREATE TABLE IF NOT EXISTS users (
-                    id SERIAL PRIMARY KEY,
-                    username VARCHAR(30) NOT NULL UNIQUE CHECK (char_length(username) >= 1),
-                    password_hash TEXT NOT NULL,
-                    max_score INTEGER
-                );
-
+                        id SERIAL PRIMARY KEY,
+                        username TEXT NOT NULL UNIQUE,
+                        password_hash TEXT NOT NULL,
+                        max_score INTEGER
+                    );
                 ";
                 cmd.ExecuteNonQuery();
             }
@@ -76,23 +78,8 @@ namespace SnakeGame
         {
             if (_conn == null) return null;
 
-            if (string.IsNullOrWhiteSpace(username) || username.Length > 99)
-            {
-                PinkMessageBox.Show("Имя пользователя должно содержать от 1 до 30 символов.");
-                return null;
-            }
-
-            if (password.Length < 6 || password.Length > 99)
-            {
-                PinkMessageBox.Show("Пароль должен содержать от 6 до 30 символов.");
-                return null;
-            }
-
             if (GetUserByUsername(username) != null)
-            {
-                PinkMessageBox.Show("Пользователь с таким именем уже существует.");
                 return null;
-            }
 
             try
             {
@@ -112,7 +99,6 @@ namespace SnakeGame
                 return null;
             }
         }
-
 
         public static User? GetUserByUsername(string username)
         {
