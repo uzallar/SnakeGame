@@ -275,7 +275,7 @@ namespace SnakeGame
             if (model.CheckCollisions())
             {
                 gameTimer.Stop();
-                PinkMessageBox.Show($"Игра окончена! Ты съел: {model.Score}");
+                PinkMessageBox.Show($"Игра окончена! Твой счет: {model.Score}");
                 GameRunning = false;
                 IsGameStarted = false;
                 CommandManager.InvalidateRequerySuggested();
@@ -301,9 +301,7 @@ namespace SnakeGame
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         private void ChangeDifficulty()
         {
             bool wasPaused = IsPaused;
@@ -348,5 +346,8 @@ namespace SnakeGame
                 IsPaused = wasPaused;
             }
         }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

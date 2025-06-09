@@ -4,25 +4,16 @@ namespace SnakeGame
 {
     public partial class PinkMessageBox : Window
     {
-        private MessageBoxResult _result = MessageBoxResult.None;
+        private readonly PinkMessageBoxViewModel _viewModel;
 
         public PinkMessageBox(string message, bool isConfirmation)
         {
             InitializeComponent();
-            MessageTextBlock.Text = message;
-
-            if (isConfirmation)
+            _viewModel = new PinkMessageBoxViewModel(message, isConfirmation)
             {
-                YesButton.Visibility = Visibility.Visible;
-                NoButton.Visibility = Visibility.Visible;
-                OkButton.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                OkButton.Visibility = Visibility.Visible;
-                YesButton.Visibility = Visibility.Collapsed;
-                NoButton.Visibility = Visibility.Collapsed;
-            }
+                CloseAction = () => Close()
+            };
+            DataContext = _viewModel;
         }
 
         public static void Show(string message)
@@ -37,29 +28,11 @@ namespace SnakeGame
             {
                 var box = new PinkMessageBox(message, true);
                 box.ShowDialog();
-                return box._result;
+                return box._viewModel.Result;
             }
 
             Show(message);
             return MessageBoxResult.OK;
-        }
-
-        private void OkButton_Click(object sender, RoutedEventArgs e)
-        {
-            _result = MessageBoxResult.OK;
-            Close();
-        }
-
-        private void YesButton_Click(object sender, RoutedEventArgs e)
-        {
-            _result = MessageBoxResult.Yes;
-            Close();
-        }
-
-        private void NoButton_Click(object sender, RoutedEventArgs e)
-        {
-            _result = MessageBoxResult.No;
-            Close();
         }
     }
 }
