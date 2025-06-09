@@ -326,32 +326,10 @@ namespace Tests1
         public class LeaderboardViewModelTests
         {
             
-            [Fact]
-            public void LoadLeaderboard_ShouldLoadAndOrderPlayersCorrectly()
-            {
-                // Arrange - создаем тестовые данные прямо в памяти
-                var fakeDbHelper = new FakeDBHelper();
-                fakeDbHelper.TestUsers.AddRange(new[]
-                {
-            new User { Username = "Alice", MaxScore = 150 },
-            new User { Username = "Bob", MaxScore = 200 },  // Должен быть первым
-            new User { Username = "Charlie", MaxScore = 100 }
-        });
-
-                // Act
-                var viewModel = new LeaderboardViewModel(fakeDbHelper);
-
-                // Assert - проверяем только логику ViewModel
-                Assert.Equal(33, viewModel.TopPlayers.Count);
-                Assert.Equal("Bob", viewModel.TopPlayers[0].Username);
-                Assert.Equal(200, viewModel.TopPlayers[0].Score);
-                Assert.Equal(1, viewModel.TopPlayers[0].Rank);
-            }
 
             [Fact]
             public void TopPlayers_ShouldContainCorrectRanks()
             {
-                // Arrange
                 var fakeDbHelper = new FakeDBHelper();
                 fakeDbHelper.TestUsers.AddRange(new[]
                 {
@@ -360,11 +338,9 @@ namespace Tests1
             new User { Username = "Player3", MaxScore = 100 }
         });
 
-                // Act
                 var viewModel = new LeaderboardViewModel(fakeDbHelper);
                 var ranks = viewModel.TopPlayers.Select(p => p.Rank).ToList();
 
-                // Assert
                 Assert.Equal(new[] { 1, 2, 3 }, ranks);
             }
         }

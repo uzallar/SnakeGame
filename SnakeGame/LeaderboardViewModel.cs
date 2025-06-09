@@ -1,4 +1,4 @@
-﻿// LeaderboardViewModel.cs
+﻿
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -20,7 +20,6 @@ namespace SnakeGame.ViewModels
         IEnumerable<User> GetTopPlayers(int count);
     }
 
-    // Реальная реализация для production
     public class DBHelperWrapper : IDBHelper
     {
         public IEnumerable<User> GetTopPlayers(int count)
@@ -29,7 +28,6 @@ namespace SnakeGame.ViewModels
         }
     }
 
-    // Фейковая реализация для тестов
     public class FakeDBHelper : IDBHelper
     {
         public List<User> TestUsers { get; } = new List<User>();
@@ -57,7 +55,7 @@ namespace SnakeGame.ViewModels
         public void LoadLeaderboard()
         {
             TopPlayers = new ObservableCollection<LeaderboardEntry>();
-            var topUsers = _dbHelper.GetTopPlayers(10); // Используем инжектированную зависимость
+            var topUsers = _dbHelper.GetTopPlayers(10); 
             int rank = 1;
 
             foreach (var user in topUsers)

@@ -183,7 +183,7 @@ namespace SnakeGame
             Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
         }
 
-        private void SetGameSpeed(int speed, SnakeSpeed speedLevel)
+        public void SetGameSpeed(int speed, SnakeSpeed speedLevel)
         {
             _gameSpeed = speed;
             model.CurrentSpeed = speedLevel;
@@ -197,7 +197,7 @@ namespace SnakeGame
 
         private void ExitGame() => Application.Current.Shutdown();
 
-        private void ResumeGame()
+        public void ResumeGame()
         {
             if (IsPaused)
             {
@@ -207,7 +207,7 @@ namespace SnakeGame
             }
         }
 
-        private void PauseGame()
+        public void PauseGame()
         {
             if (!IsGameStarted || !GameRunning) return;
             IsPaused = !IsPaused;
@@ -217,7 +217,7 @@ namespace SnakeGame
                 gameTimer.Start();
         }
 
-        private void RestartGame()
+        public void RestartGame()
         {
             StartGame();
             if (IsPaused)
@@ -228,7 +228,7 @@ namespace SnakeGame
             CommandManager.InvalidateRequerySuggested();
         }
 
-        private void StartGame()
+        public void StartGame()
         {
             model.InitializeGame();
             NextDirection = model.SnakeDirection;
@@ -244,7 +244,7 @@ namespace SnakeGame
             ScoreChanged?.Invoke(this, model.Score);
         }
 
-        private void ChangeDirection(Direction direction)
+        public void ChangeDirection(Direction direction)
         {
             if (!IsPaused)
             {

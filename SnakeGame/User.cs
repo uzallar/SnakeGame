@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
         public string Username { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty; // Хэш пароля
+        public string PasswordHash { get; set; } = string.Empty; 
 
-        public int MaxScore { get; set; } // Максимальный рекорд игрока
+        public int MaxScore { get; set; } 
     }
 }
